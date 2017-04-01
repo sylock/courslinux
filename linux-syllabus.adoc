@@ -1,40 +1,312 @@
+
 = Administration de systèmes Linux
 {localdate}
 Nicolas Michel
+:sectnums:
+:icons: font
 :toc:
 
 == Comment est né UNIX ?
+
 === Les Premiers pas
-Pour comprendre comment et pourquoi UNIX est né, il faut d’abord essayer de se remettre dans le
-contexte et comprendre où en était l’informatique dans les années 50 et 60. Il s’agissait
-d’énormes machines prenant la place d’une très grande pièce et pesant plusieurs tonnes. Bien entendu
-leur taille diminuait d’années en années, mais cela restait des machines très coûteuses, uniquement
-accessibles aux états, aux universités, aux plus grandes entreprises, et qui demandait des
-réparations et un entretient quotidien. Ces machines-là ressemblaient fort aux machines
-industrielles: constituées d’un grand nombre de parties mécaniques. Elles étaient lentes par rapport
-à aujourd’hui. Pour économiser le temps machine, au lieu d’encoder directement les programmes
-informatique
-sur un clavier relié à l’ordinateur, les informaticiens encodaient les programmes sur des cartes
-perforées de 80 colonnes, 8 bits par colonne. Une carte ou un ensemble de cartes perforées, selon
-la complexité, représentaient un programme, qui était chargé en mémoire, exécuté, pour finalement
-fournir le résultat via une imprimante, un écran ou une autre carte perforée pour une utilisation future.
-La chose importante à retenir est que ces ordinateurs ne pouvaient exécuter qu’un seul programme à
-la fois. Pour optimiser le rendement, les ingénieurs préparaient des batch1, c’est à dire une
-compilation d’un ensemble de carte perforées (plusieurs programmes) sur une bande de plus grande
-longueur. De cette manière, l’ordinateur pouvait charger et exécuter programme après programme
-rapidement, sans intervention humaine pour insérer chaque nouvelle carte perforée.
-Il faut également savoir que s’il y avait la moindre erreur dans un programme, son exécution était
-stoppée. Il fallait donc corriger, puis réintégrer la nouvelle version dans le prochain batch.
-En 1957, un ingénieur d’IBM, Robert William Bemer2, publie pour la première fois le concept du
-temps-partagé: plutôt que d’exécuter un seul programme à la fois, il propose qu'un grand nombre
-de terminaux pourraient être connectés au même moment au serveur central (au main frame), et que
-chaque utilisateur puisse avoir la possibilité d'interagir directement et d’entrer son code au
-clavier. Il a pris pour hypothèse que le grand nombre d’utilisateurs simultané aurait pour effet
-de diminuer les périodes idle (au repos) du processeur central, tout en procurant aux utilisateurs
-plus de flexibilité car ils ne doivent pas attendre que leur programme soit intégré dans un batch.
-Il peuvent l’écrire et l’exécuter en temps réel. D’un point de vue technique, la difficulté réside
-dans la création d’un système d’exploitation capable de gérer l’exécution d’un grand nombre de
-programmes simultanément au moyen d’un seul processeur. Il faut pouvoir interrompre et reprendre
-l’exécution pendant une courte durée des différents processus afin de les traiter en alternance et
-de donner l’impression aux utilisateurs que leur programme est exécuté en temps réel. Cela implique
-notamment de sauvegarder l’état de chaque programme en mémoire, composant qui était très coûteux à l’époque.
+
+Pour comprendre comment et pourquoi UNIX est né, il faut d’abord essayer de se remettre dans le contexte et comprendre où en était l’informatique dans les années 50 et 60.
+Il s’agissait d’énormes machines prenant la place d’une très grande pièce et pesant plusieurs tonnes.
+Bien entendu leur taille diminuait d’années en années, mais cela restait des machines très coûteuses, uniquement accessibles aux états, aux universités, aux plus grandes entreprises, et qui demandait des réparations et un entretient quotidien.
+Ces machines-là ressemblaient fort aux machines industrielles: constituées d’un grand nombre de parties mécaniques.
+Elles étaient lentes par rapport à aujourd’hui.
+Pour économiser le temps machine, au lieu d’encoder directement les programmes informatiques sur un clavier relié à l’ordinateur, les informaticiens encodaient les programmes sur des cartes perforées de 80 colonnes, 8 bits par colonne.
+
+//https://commons.wikimedia.org/wiki/File:Blue-punch-card-front.png
+.Une carte perforée 80 colonnes d'IBM d'un des types les plus utilisés au xxe siècle.
+image::images/punch-card.png[IBM Punch Card, 300, 200, align="left", link="images/punch-card.png"]
+
+Une carte ou un ensemble de cartes perforées, selon la complexité, représentaient un programme, qui était chargé en mémoire, exécuté, pour finalement fournir le résultat via une imprimante, un écran ou une autre carte perforée pour une utilisation future.
+La chose importante à retenir est que ces ordinateurs ne pouvaient exécuter qu’un seul programme à la fois.
+Pour optimiser le rendement, les ingénieurs préparaient des batchs
+footnote:[batch qui signifie en anglais: lot, paquet.]
+, c’est à dire une compilation d’un ensemble de carte perforées (plusieurs programmes) sur une bande de plus grande longueur.
+De cette manière, l’ordinateur pouvait charger et exécuter programme après programme rapidement, sans intervention humaine pour insérer chaque nouvelle carte perforée.
+Il faut également savoir que s’il y avait la moindre erreur dans un programme, son exécution était stoppée.
+Il fallait donc corriger, puis réintégrer la nouvelle version dans le prochain batch.
+En 1957, un ingénieur d’IBM, Robert William Bemer
+footnote:[Robert William Bemer a été un ingénieur de son temps fort actif: outre le concept du time-sharing, il a créé le code ASCII, il a participé à l’élaboration du langage COBOL, il a été le premier en 1971 à anticiper le bug de l’an 2000.]
+, publie pour la première fois le concept du temps-partagé: plutôt que d’exécuter un seul programme à la fois, il propose qu'un grand nombre de terminaux pourraient être connectés au même moment au serveur central (au main frame), et que chaque utilisateur puisse avoir la possibilité d'interagir directement et d’entrer son code au clavier.
+Il a pris pour hypothèse que le grand nombre d’utilisateurs simultané aurait pour effet de diminuer les périodes idle (au repos) du processeur central, tout en procurant aux utilisateurs plus de flexibilité car ils ne doivent pas attendre que leur programme soit intégré dans un batch.
+Il peuvent l’écrire et l’exécuter en temps réel.
+D’un point de vue technique, la difficulté réside dans la création d’un système d’exploitation capable de gérer l’exécution d’un grand nombre de programmes simultanément au moyen d’un seul processeur.
+Il faut pouvoir interrompre et reprendre l’exécution pendant une courte durée des différents processus afin de les traiter en alternance et de donner l’impression aux utilisateurs que leur programme est exécuté en temps réel.
+Cela implique notamment de sauvegarder l’état de chaque programme en mémoire, composant qui était très coûteux à l’époque.
+
+
+==  Les distributions Linux
+
+Dans le langage courant, on parle de "Linux" pour désigner le système d'exploitation complet.
+Techniquement, Linux est uniquement le noyau (ou kernel en anglais) développé par le finlandais Linus Torvalds en 1991.
+
+//https://flic.kr/p/72vuYo
+.Linus Torvald, créateur du noyau Linux
+image::images/linus-torvald.jpg[Linus Torvald, 300, 300, link="images/linus-torvald.jpg", align="left"]
+
+Le kernel est la pièce fondamentale de tout système d'exploitation : Windows, Mac OS, Linux, *BSD...
+Il gère la communication entre les logiciels et le matériel, la planification des processus (les programmes qui sont lancés), et bien entendu, il initialise et pilote le matériel.
+Le cœur du kernel Linux sur les distributions courantes (sans les modules) fait environ 4 Mo.
+Un kernel seul, bien qu'il soit la pièce maîtresse, ne fait pas l'entièreté d'un système d'exploitation.
+Il y a beaucoup d'autres logiciels nécessaires.
+Par exemple, toutes les commandes de base (cd, ls, cat et autres) sont chacune des mini-logiciels.
+Toutes ces commandes de bases font parties d'un autre projet open-source, appellé GNU
+footnote:[http://fr.wikipedia.org/wiki/GNU] (GNU is Not Unix).
+Puis il y a encore l'environnement de bureau (l'interface graphique).
+Il y en a plusieurs disponibles pour Linux.
+
+.Interfaces graphiques les plus connues
+[cols="1,4"]
+|===
+|Nom |Description
+
+|Unity
+|l'interface d'Ubuntu, basé sur Gnome
+
+|Gnome
+|reprend quelques idées de Mac OS, c'est à dire une interface simple et épurée
+
+|KDE
+|reprend quelques idées de Windows, notamment le menu démarrer, la liste des programmes. Son but n'est pas d'être simple ou épuré, mais de proposer le plus de fonctionnalités possibles
+
+|Cinnamon
+|un dérivé de Gnome créé par la distribution Linux Mint
+
+|XFCE
+|un bureau minimaliste ressemblant à Gnome, mais moins gourmand en CPU et mémoire, permettant ainsi de le faire tourner sur des machines plus modestes
+
+|LXDE
+|encore plus léger que xfce, l'interface semble aujourd'hui un peu obsolète par rapport à ce qu'on connaît, mais il tourne sur de très vieilles configurations
+|===
+
+Il y a encore beaucoup d'autres logiciels nécessaires comme la gestion du démarrage des services, le login screen , l'assistant d'installation, et.
+Une distribution est donc un package constitué de ces nombreux logiciels qui, ensemble, forment un système d'exploitation complet utilisable par vous et mo.
+Chaque distribution fait des choix dans les programmes employés pour remplir les divers besoin.
+Ces choix sont basés sur des objectifs et une philosophie différent.
+Les distributions peuvent également être regroupées en familles car certaines distributions sont dérivées d'autre.
+
+.Liste des distributions Linux les plus courantes.
+[graphviz, "figures/distributions", svg]
+----
+digraph paths {
+    graph [overlap = false];
+    Debian               -> Ubuntu
+    Debian               -> SteamOS
+    Ubuntu               -> "Linux Mint"
+    "Red Hat Enterprise" -> Fedora
+    "Red Hat Enterprise" -> Centos
+    "SUSE Enterprise"    -> OpenSUSE
+    Archlinux
+    Slackware
+    Gentoo
+}
+----
+
+
+.Description des principales distributions
+[cols="1,1,1,4"]
+|===
+|Nom |Parenté |Bureau par défaut |Description
+
+|Debian
+|-
+|Gnome
+|Distribution entièrement gérée par une communauté de bénévoles qui a vu le jour en 1996. Elle a créé le système de paquet apt-get et beaucoup de distributions actuelles sont basés dessus.
+
+|Ubuntu
+|Debian
+|Unity
+|Probablement la plus connue des distributions. Créée par Marc Shuttleworth, un sud-africain, cette distribution a pour but d'être la plus facile d'accès et de masquer au maximum la complexité technique. Elle est basée sur Debian.
+
+|Linux Mint
+|Ubuntu
+|Cinnamon
+|Basé sur Ubuntu, Linux Mint est une distribution récente qui pense pouvoir faire mieux qu'Ubuntu. Ils ont donc fait d'autres choix. Ils ont notamment ré-écris l'environnement de bureau pour donner naissance à Cinnamon.
+
+|StemOS
+|Debian
+|Gnome
+|Basé sur Debian, cette distribution a été créée en 2013 par Valve Software dans le but de créer une console de jeux basée sur Steam.
+
+|Red Hat Enterprise Linux
+|Fedora
+|Gnome
+|Red Hat est la société américaine bien connue pour sa distribution Linux orientée entreprise. Le contrat oblige l'utilisateur a payer la licence dès qu'une Red Hat est installé, et bénéficie ainsi du support. On ne peut pas installer une Red Hat sans payer. Cette distribution vise la stabilité avant tout, afin de faire tourner des serveurs. Elle n'a donc pas toujours toutes les dernières nouveautés.
+
+|Centos
+|Red Hat Enterprise Linux
+|Gnome
+|Centos est un projet maintenu par des bénévoles, qui reprennent le code source de Red Hat, et le re-package. Une Centos est donc un Red Hat « re-brandé », et entièrement gratuit.
+
+|Fedora
+|Red Hat Enterprise Linux
+|Gnome
+|Fedora est la distribution « laboratoire » de Red Hat. Elle est mise à jour tous les 6 mois avec les dernières versions de tous les logiciels. Les meilleurs logiciels dans leur meilleure version sont retenu pour la création des Red Hat Linux.
+
+|Archlinux
+|-
+|-
+|C'est une distribution qui suit le principe KISS footnote:[Keep It Simple, Stupid : http://fr.wikipedia.org/wiki/Principe_KISS], et est à conseiller pour toute personne curieuse qui veut en connaître plus sur le fonctionnement interne de Linux. En effet, après l'installation, on se retrouver avec un linux en command-line minimal. Tout le reste doit être installé et configuré à la main. La documentation sur leur site web est exemplaire.
+
+|Slackware
+|-
+|KDE
+|Slackware fait figure de dinosaure car elle a été la première distribution réalisée à grande échelle, en 1992 (le kernel Linux date de 1991). Elle est toujours maintenue par une seule personne : Patrick Volkerding. C'est une distribution extrêmement dépouillée et simple.
+
+|OpenSUSE
+|-
+|Gnome
+|Distribution gérée par une communauté ainsi que des employé de la société allemande SUSE. Elle vise la facilité d'administration via des outils comme yast, un menu global permettant de configurer l'entièreté du système. Elle est donc plus accessible pour des gens qui seraient moins experts en Linux. Le danger étant bien entendu de ne pas comprendre ce qui se passe réellement derrière, et donc une difficulté de troubleshooting.
+
+|Suse Enterprise
+|OPenSUSE
+|Gnome
+|Version entreprise et payante d'OpenSUSE.
+
+|Gentoo
+|-
+|KDE
+|Le concept de Gentoo est que toute application est compilée avant installation alors que toutes autres distributions téléchargent une version pré-compilée. Selon la puissance de votre machine et la grosseur du logiciel, la compilation peut prendre plus ou moins de temps. L'idée c'est qu'en compilant sur votre machine, on pourra exploiter toutes les instructions spécifiques du CPU alors que lorsque c'est pré-compilé, on doit utiliser un set d'instructions standard afin que cela fonctionne sur toutes les machines. C'est donc un léger gain de performance. Mais cela n'a vraiment de sens que pour des supercalculateurs, ou au contraire, des vieilles machines pour lesquels tout gain de performance est intéressant.
+|===
+
+Vous trouverez une liste de toutes les distributions connues sur le site distrowatch footnote:[http://distrowatch.com/].
+
+== Le shell
+
+===  Qu'est-ce que le shell ?
+
+Le shell est un programme qui prend des commandes entrées via le clavier,  les donne ensuite au système d'exploitation afin de les interpréter et de les exécuter.
+À l'époque de la création de UNIX, c'était le moyen le plus efficace permettant d’interagir avec le système d'exploitation.
+Depuis, les interfaces graphiques (GUI) ont fait leur apparition, permettant des manipulations de façon plus intuitive.
+Le shell n'est pas un outil intuitif.
+Il faut connaître une série de commandes qui vont permettre de travailler avec.
+Cependant, une fois maîtrisé, il est généralement plus puissant que l'interface graphique
+footnote:[Bien entendu, si votre travail concerne un document typiquement visuel comme une image, une vidéo, une page web, etc, l'interface graphique sera généralement plus efficace.]
+car il permet de combiner différents programmes en chaîne, afin de transformer petit à petit les données de départ.
+On verra cela en pratique avec le pipe : `|`.
+Il permet aussi de réaliser des scripts afin d'automatiser les tâches récurrentes.
+Un shell, bien qu'il ressemble de prime abord à un langage de programmation, comme le C, le java, le python, le perl, le ruby … n'en est pas un ! La différence majeure est qu'un shell se contente d'exécuter différents programmes qui ont été préalablement écrit dans un langage de programmation (souvent en C pour les commandes de base) et qui sont déjà compilés en langage machine.
+Il apporte en plus quelques éléments syntaxiques supplémentaires pour faciliter leur combinaison : les boucle, les conditions, les redirections … Un langage de programmation lui, va lire le code source, l'interpréter pour finalement le compiler en langage machine pour donner UN programme.
+Un shell ne produit jamais de lui-même de langage machine.
+Il en découle que pour réaliser une tâche simple, le shell sera plus efficace et demandera moins de lignes de codes, puis qu'il combine des programmes qui s'occupent déjà, via leur programmation, de gérer par eux-même une série de cas de figure.
+Finalement, il y a même certaines manipulations orientées systèmes qui seraient vraiment fastidieuses à réaliser dans un langage de programmation.
+Prenons un exemple simple : la configuration des cartes réseaux.
+Si on voulait le réaliser dans un langage de programmation, il faudrait que notre programme parle directement au module kernel gérant le réseau (via les librairies C réseaux), ce qui demanderait beaucoup de connaissances, de temps et de lignes de code, sachant que de mauvaises instructions données au noyau pourraient faire crasher la machine.
+En shell, il existe plusieurs commandes que nous verrons plus tard, qui prennent en argument la configuration souhaitée et parlent au noyau afin de l'appliquer.
+
+.Exemple de la commande ip qui permet d'assigner une IP à notre carte réseau principale
+[source, console]
+----
+$ ip address add 192.168.1.10/24 dev eth0
+----
+
+En une ligne, nous avons réalisé une opération qui techniquement, n'est pas si simple que cela.
+Les limites du shell sont atteintes dès qu'il faut manipuler des structures de données complexes.
+On gagnera alors à utiliser perl ou python
+footnote:[Python a la cote et est fort utilisé par les entreprises web. Savez-vous que Dropbox est entièrement écrit en python ?]
+.
+
+==  Quel shell utilisons-nous ?
+
+Le premier shell pour UNIX a été écrit en 1971 par Kenneth Thompson.
+En 1977, Stephen Bourne écrit sh pour la version 7 de UNIX.
+D'autres shell ont ensuite vu le jour.
+Csh s'inspire de la syntaxe du C, est écrit par Bill Joy
+footnote:[Bill Joy est le fondateur de Sun Microsystem (Solaris). Avant de créer sa société, il a également été l'auteur de vi, de la première pile TCP/IP de UNIX, et csh.]
+.
+En 1983, ksh ou Korn Shell, est écrit par David Korn, qui inclut certaines améliorations de csh et ajoute certaines manipulations qui étaient plutôt retrouvées dans les langages de programmation ou les utilitaires spécialisés comme awk ou sed.
+C'est le shell par défaut sur AIX.
+De nos jours, sous Linux, le shell par défaut le plus courant est bash : Bourne Again Shell, écrit par la Free Software Fondation en 1988.
+Il reprend beaucoup d'améliorations des précédents shell.
+
+.Une façon de connaître le shell utilisé
+[source, console]
+----
+$ echo $SHELL
+/bin/bash
+----
+
+.Une autre façon de connaître le shell utilisé
+[source, console]
+----
+$ echo $0
+-bash
+----
+
+==  Comment accéder au shell ?
+
+Votre shell (bash) doit être exécuté dans un terminal.
+Qu'est-ce que c'est que ça? Un terminal est simplement le logiciel qui va gérer les entrées au clavier et gérer l'affichage sur votre écran.
+Le shell lui, ne s'occupe que d'interpréter les commandes constituées par les lettres que le terminal lui envoi, ainsi que de dialoguer avec le kernel.
+Historiquement, un terminal est un ordinateur simplifié qui est juste capable de gérer l'affichage et les entrées au clavier.
+Il était connecté via un câble série (COM1, COM2 …) au serveur faisant tourner UNIX.
+
+//https://fr.wikipedia.org/wiki/RS-232#/media/File:Serial_port.jpg
+.Port série
+image::images/serial-port.jpg[Port série, 300, 300, link="images/serial-port.jpg", align="left"]
+
+Aujourd'hui, s'il est toujours possible de se connecter au terminal via un port COM, et c'est bien utile dans les cas de dépannage les plus désespérés (carte graphique HS par exemple), on accède presque toujours au shell via un terminal logiciel, ce qu'on appelle un terminal virtuel.
+Il en existe beaucoup.
+
+=== La console Linux
+
+Il y a tout d'abord un terminal que vous trouverez sur toutes les distributions, en pur mode texte et fourni directement par le kernel (pas besoin d'interface graphique).
+Vous le trouverez en appuyant sur les touches CTRL+ALT+F1 à F7.
+Vous retrouverez votre interface graphique, si elle est lancée, sur l'une de ces combinaisons.
+Traditionnellement, la console graphique se trouve sur CTRL+ALT+F7, mais cela peut varier d'une distribution à l'autre.
+Sur Fedora 20 vous la trouverez sur CTRL+ALT+F1.
+On l'utilise en général pour le dépannage car l'absence (par défaut) de souris pour les copier-coller et sa faible mémoire d'historique rend son utilisation moins conviviale.
+
+NOTE: Pour visualiser les pages précédentes en console texte, utilisez SHIFT droit + Page UP et Page Down
+
+===  Le terminal de l'environnement de bureau
+
+C'est le terminal qu'on utilisera le plus souvent.
+Chaque environnement de bureau en propose un.
+Pour Gnome, c'est gnome-terminal.
+Pour KDE c'est konsole,  etc.
+En général, depuis le menu applications, faites une recherche sur le mot-clé « terminal ».
+En cas de doute, l'icône devrait vous mettre sur la bonne voie.
+
+===  Les terminaux graphiques tiers
+
+Il y a toute sorte d'autres terminaux qui fonctionnent sur l'interface graphique et qui ne sont pas liés à une distribution ou un environnement de bureau.
+Vous avez par exemple xterm qui est l'un des plus ancien, rxvt qui a toujours ses aficionados, aterm, etc.
+
+===  Les terminaux graphiques de type drop-down
+
+Une série de terminaux se sont inspirés de la console du jeux vidéo Quake, qu'on pouvait faire apparaître au moyen de la touche « exposant 2 » (à gauche de la touche « chiffre 1 »).
+Ces terminaux sont très pratiques pour une utilisation quotidienne car en général, ils sont lancé automatiquement au démarrage de votre session graphique, et peuvent être appelé à tout moment en appuyant sur une touche définie (par exemple F12).
+Ils supportent en général les onglets.
+
+.Quelques terminaux drop-down
+[cols="1,4"]
+|===
+|Nom |Description
+
+|Guake
+|Fonctionne le mieux sur un bureau Gnome
+
+|Terra
+|Alternative à Guake. Également prévu pour Gnome.
+
+|Yakuake
+|Fonctionne le mieux sur un bureau KDE
+|===
+
+==  Qu'est ce que l'invite de commande ?
+
+Lorsque vous démarrez votre terminal, votre shell vous présente ce qu'on appelle une invite de commande (prompt en anglais).
+C'est à dire un petit texte qui reprend quelques informations, et un curseur clignotant vous indiquant à quel endroit va être affiché ce que vous allez taper au clavier.
+
+.L'invite de commande
+[source, console]
+ ----
+ titi@ma-tour:~$
+ ----
+
+NOTE: Signalons que l'arobase se dit "at" en anglais, ce qu'on peut traduire par « chez »,  « sur ». On pourrait donc construire une phrase avec l'ensemble de ces éléments. Par exemple : « je suis titi sur ma-tour dans ma home directory et je suis un utilisateur standard »

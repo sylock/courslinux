@@ -1,0 +1,37 @@
+== asciidoc template
+
+=== terminal
+
+.my description
+[source, console]
+----
+$ echo $0
+-bash
+----
+
+=== images
+
+//put URL source of the image
+.Description
+image::images/serial-port.jpg[Port série, 300, 300, link="images/serial-port.jpg", align="left"]
+
+=== Tableaux
+
+.Description des principales distributions
+[cols="1,1,1,4"]
+|===
+|Nom |Parenté |Bureau par défaut |Description
+
+== Search and Replace
+
+=== Split sentences
+
+When needing to split sentences on each line, do a search and replace with regex into selection
+
+Replace:
+ (\.+)\ +
+By:
+ $1\n
+
+=== Replace guillemets by right ones
+[(«\ *)|(\ *»)]
