@@ -210,7 +210,7 @@ On gagnera alors à utiliser perl ou python
 footnote:[Python a la cote et est fort utilisé par les entreprises web. Savez-vous que Dropbox est entièrement écrit en python ?]
 .
 
-==  Quel shell utilisons-nous ?
+===  Quel shell utilisons-nous ?
 
 Le premier shell pour UNIX a été écrit en 1971 par Kenneth Thompson.
 En 1977, Stephen Bourne écrit sh pour la version 7 de UNIX.
@@ -237,7 +237,7 @@ $ echo $0
 -bash
 ----
 
-==  Comment accéder au shell ?
+===  Comment accéder au shell ?
 
 Votre shell (bash) doit être exécuté dans un terminal.
 Qu'est-ce que c'est que ça? Un terminal est simplement le logiciel qui va gérer les entrées au clavier et gérer l'affichage sur votre écran.
@@ -252,7 +252,7 @@ image::images/serial-port.jpg[Port série, 300, 300, link="images/serial-port.jp
 Aujourd'hui, s'il est toujours possible de se connecter au terminal via un port COM, et c'est bien utile dans les cas de dépannage les plus désespérés (carte graphique HS par exemple), on accède presque toujours au shell via un terminal logiciel, ce qu'on appelle un terminal virtuel.
 Il en existe beaucoup.
 
-=== La console Linux
+==== La console Linux
 
 Il y a tout d'abord un terminal que vous trouverez sur toutes les distributions, en pur mode texte et fourni directement par le kernel (pas besoin d'interface graphique).
 Vous le trouverez en appuyant sur les touches CTRL+ALT+F1 à F7.
@@ -263,7 +263,7 @@ On l'utilise en général pour le dépannage car l'absence (par défaut) de sour
 
 NOTE: Pour visualiser les pages précédentes en console texte, utilisez SHIFT droit + Page UP et Page Down
 
-===  Le terminal de l'environnement de bureau
+====  Le terminal de l'environnement de bureau
 
 C'est le terminal qu'on utilisera le plus souvent.
 Chaque environnement de bureau en propose un.
@@ -272,12 +272,12 @@ Pour KDE c'est konsole,  etc.
 En général, depuis le menu applications, faites une recherche sur le mot-clé « terminal ».
 En cas de doute, l'icône devrait vous mettre sur la bonne voie.
 
-===  Les terminaux graphiques tiers
+====  Les terminaux graphiques tiers
 
 Il y a toute sorte d'autres terminaux qui fonctionnent sur l'interface graphique et qui ne sont pas liés à une distribution ou un environnement de bureau.
 Vous avez par exemple xterm qui est l'un des plus ancien, rxvt qui a toujours ses aficionados, aterm, etc.
 
-===  Les terminaux graphiques de type drop-down
+====  Les terminaux graphiques de type drop-down
 
 Une série de terminaux se sont inspirés de la console du jeux vidéo Quake, qu'on pouvait faire apparaître au moyen de la touche « exposant 2 » (à gauche de la touche « chiffre 1 »).
 Ces terminaux sont très pratiques pour une utilisation quotidienne car en général, ils sont lancé automatiquement au démarrage de votre session graphique, et peuvent être appelé à tout moment en appuyant sur une touche définie (par exemple F12).
@@ -298,15 +298,130 @@ Ils supportent en général les onglets.
 |Fonctionne le mieux sur un bureau KDE
 |===
 
-==  Qu'est ce que l'invite de commande ?
+===  Qu'est ce que l'invite de commande ?
 
 Lorsque vous démarrez votre terminal, votre shell vous présente ce qu'on appelle une invite de commande (prompt en anglais).
 C'est à dire un petit texte qui reprend quelques informations, et un curseur clignotant vous indiquant à quel endroit va être affiché ce que vous allez taper au clavier.
 
 .L'invite de commande
 [source, console]
- ----
- titi@ma-tour:~$
- ----
+----
+titi@ma-tour:~$
+----
 
-NOTE: Signalons que l'arobase se dit "at" en anglais, ce qu'on peut traduire par « chez »,  « sur ». On pourrait donc construire une phrase avec l'ensemble de ces éléments. Par exemple : « je suis titi sur ma-tour dans ma home directory et je suis un utilisateur standard »
+.Explication des éléments de l'invite de commande
+[cols="1,4"]
+|===
+|Nom |Description
+
+|titi
+|Indique l'utilisateur avec lequel vous êtes connecté
+
+|ma-tour
+|Le nom de l'ordinateur (hostname).
+
+|~
+|après les deux-points, le répertoire courant. Le tilde signifie la home directory footnote:[La home directory, ou répertoire utilisateur, est l'endroit où l'ensemble des fichiers appartenant à un utilisateur vont être stockés. C'est là qu'on va trouver les dossiers Documents, Images, Vidéos, Musiques, Téléchargements, etc. Mais aussi certains fichiers de configurations uniquement applicables à l'utilisateur.] de l'utilisateur courant (titi ici).
+
+.2+|$ ou #
+|$ - lorsque vous êtes un utilisateur sans droit d'administration.
+
+|# - lorsque vous êtes en root (super-user).
+
+
+
+|===
+
+NOTE: Signalons que l'arobase se dit "at" en anglais, ce qu'on peut traduire par « chez »,  « sur ». On pourrait donc construire une phrase avec l'ensemble de ces éléments: « je suis titi sur ma-tour dans ma home directory et je suis un utilisateur standard »
+
+Vous devez finalement savoir que le prompt peut-être personnalisé.
+Vous n'aurez donc peut-être pas exactement le même, selon la distribution sur laquelle vous vous trouvez, mais généralement, cela y ressemble fort.
+
+=== La complétion automatique
+
+Dans votre shell, appuyez sur la touche tabulation pour compléter automatiquement votre commande ou votre chemin.
+Le shell va essayer de déterminer les différentes possibilités.
+S'il n'y en a qu'une, il écrit le nom de la commande en entier ou le chemin complet.
+S'il y a plusieurs choix, taper rapidement deux fois sur TAB pour obtenir les différentes possibilités.
+
+."if" suivi d'un appui sur TAB - il ne se passe rien
+[source, console]
+----
+$ if #suivi d'un appui sur TAB
+----
+
+."if" suivi de deux appui rapide sur TAB fait apparaître les différentes possibilités
+[source, console]
+----
+$ if #suivi de deux appui sur TAB
+if	ifconfig	ifdown	ifnames	ifquery	ifup
+----
+
+.si on ajoute un c après if
+[source, console]
+----
+$ ifc #suivi d'une tabulation auto-complète la commande
+$ ifconfig
+----
+
+=== Linux est sensible à la casse !
+
+Le mot casse remonte au temps de l'imprimerie mécanique et signifiait un casier en bois où l'on rangeait les caractères en plomb d'un même type footnote:[Casse (typographie), Wikipédia : http://fr.wikipedia.org/wiki/Casse_(typographie)].
+En anglais on dit case sensitive (case avec un seul s).
+Par extension, on signifie aujourd'hui par ce terme que Linux (et les autres UNIX) font la différence entre un mot écrit en minuscule et en majuscule.
+Ifconfig ou IFconfig ou ifconfiG ne fonctionneront pas, car la commande est entièrement en minuscule : ifconfig.
+Il en va de même pour les répertoires et nom de fichiers !
+
+NOTE: Windows est insensible à la casse (ou case insensitive). Et c'est une source d'erreur fréquente lors de la découverte de Linux.
+
+=== Le copier-coller
+
+Dans un terminal graphique, lorsque vous effectuez une sélection avec la souris, il est automatiquement copié en mémoire.
+Vous pourrez le coller à tout moment en faisant : SHIFT+Insert.
+La plupart des terminaux permettent également d'utiliser le clic droit de la souris pour afficher un menu contextuel qui permet notamment le copier-coller, mais c'est plus fastidieux et donc généralement moins utilisé.
+
+== Les commandes de base
+
+Une commande est une application, un exécutable, qui a été conçu pour réaliser une tâche spécifique.
+Très souvent, on doit lui donner un ou plusieurs arguments qui précisent sur quel objet la tâche doit être effectuée : un fichier, un répertoire, une ip ...
+Les arguments sont donnés à la suite de la commande, et s'il y en a plusieurs, ils sont séparés par un espace (s'il y a plusieurs espaces ou une tabulation, cela fonctionne aussi).
+On peut généralement donner des options aux commandes : -v, -m, -l ...
+Les options ne définissent pas l'objet sur lequel porte la tâche, mais modifient la manière dont elle va être effectuée.
+Le sens et l'effet d'une option est propre et spécifique à chaque commande, bien qu'on retrouve parfois certaines options avec le même sens d'une commande à l'autre.
+
+=== cd – Change Directory
+
+cd est l'acronyme de Change Directory (changer de répertoire).
+C'est la commande qui vous permettra de naviguer dans le système de fichier et de changer votre répertoire courant.
+Donnez en argument l'emplacement vers lequel vous voulez vous rendre.
+
+.cd / vous amène à la racine du système de fichier
+[source, console]
+----
+$ cd /
+----
+
+IMPORTANT: Notez que contrairement à Windows, le séparateur de chemin est le slash / et non le backslash \
+
+===  ls – List
+
+ls liste les répertoires et les fichiers de votre arborescence.
+
+====  Sans argument
+
+.Sans argument, la commande ls permet de lister le contenu du répertoire courant
+[source, console]
+----
+$ cd /usr
+$ ls
+bin  games  include  lib  lib32  local  sbin  share  src
+----
+
+====  Les arguments et l'affichage "long"
+
+.En donnant à ls le répertoire /usr en argument, il affiche son contenu
+[source, console]
+----
+$ ls /usr
+bin  games  include  lib  lib32  local  sbin  share  src
+----
