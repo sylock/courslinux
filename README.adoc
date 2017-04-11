@@ -8,7 +8,8 @@ Exécuter le script "convert" générera un fichier html et un fichier pdf.
 .Compiler le fichier adoc pour publication
 [source, console]
 ----
-$ ./convert
+$ cd export
+./convert
 ----
 
 NOTE: vous aurez peut-être besoin de rendre le script exécutable: `chmod u+x convert`
