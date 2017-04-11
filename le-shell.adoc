@@ -1,0 +1,201 @@
+== Le shell
+
+===  Qu'est-ce que le shell ?
+
+Le shell est un programme qui prend des commandes entrées via le clavier,  les donne ensuite au système d'exploitation afin de les interpréter et de les exécuter.
+À l'époque de la création de UNIX, c'était le moyen le plus efficace permettant d’interagir avec le système d'exploitation.
+Depuis, les interfaces graphiques (GUI) ont fait leur apparition, permettant des manipulations de façon plus intuitive.
+Le shell n'est pas un outil intuitif.
+Il faut connaître une série de commandes qui vont permettre de travailler avec.
+Cependant, une fois maîtrisé, il est généralement plus puissant que l'interface graphique
+footnote:[Bien entendu, si votre travail concerne un document typiquement visuel comme une image, une vidéo, une page web, etc, l'interface graphique sera généralement plus efficace.]
+car il permet de combiner différents programmes en chaîne, afin de transformer petit à petit les données de départ.
+On verra cela en pratique avec le pipe : `|`.
+Il permet aussi de réaliser des scripts afin d'automatiser les tâches récurrentes.
+Un shell, bien qu'il ressemble de prime abord à un langage de programmation, comme le C, le java, le python, le perl, le ruby … n'en est pas un ! La différence majeure est qu'un shell se contente d'exécuter différents programmes qui ont été préalablement écrit dans un langage de programmation (souvent en C pour les commandes de base) et qui sont déjà compilés en langage machine.
+Il apporte en plus quelques éléments syntaxiques supplémentaires pour faciliter leur combinaison : les boucle, les conditions, les redirections … Un langage de programmation lui, va lire le code source, l'interpréter pour finalement le compiler en langage machine pour donner UN programme.
+Un shell ne produit jamais de lui-même de langage machine.
+Il en découle que pour réaliser une tâche simple, le shell sera plus efficace et demandera moins de lignes de codes, puis qu'il combine des programmes qui s'occupent déjà, via leur programmation, de gérer par eux-même une série de cas de figure.
+Finalement, il y a même certaines manipulations orientées systèmes qui seraient vraiment fastidieuses à réaliser dans un langage de programmation.
+Prenons un exemple simple : la configuration des cartes réseaux.
+Si on voulait le réaliser dans un langage de programmation, il faudrait que notre programme parle directement au module kernel gérant le réseau (via les librairies C réseaux), ce qui demanderait beaucoup de connaissances, de temps et de lignes de code, sachant que de mauvaises instructions données au noyau pourraient faire crasher la machine.
+En shell, il existe plusieurs commandes que nous verrons plus tard, qui prennent en argument la configuration souhaitée et parlent au noyau afin de l'appliquer.
+
+.Exemple de la commande ip qui permet d'assigner une IP à notre carte réseau principale
+[source, console]
+----
+$ ip address add 192.168.1.10/24 dev eth0
+----
+
+En une ligne, nous avons réalisé une opération qui techniquement, n'est pas si simple que cela.
+Les limites du shell sont atteintes dès qu'il faut manipuler des structures de données complexes.
+On gagnera alors à utiliser perl ou python
+footnote:[Python a la cote et est fort utilisé par les entreprises web. Savez-vous que Dropbox est entièrement écrit en python ?]
+.
+
+===  Quel shell utilisons-nous ?
+
+Le premier shell pour UNIX a été écrit en 1971 par Kenneth Thompson.
+En 1977, Stephen Bourne écrit sh pour la version 7 de UNIX.
+D'autres shell ont ensuite vu le jour.
+Csh s'inspire de la syntaxe du C, est écrit par Bill Joy
+footnote:[Bill Joy est le fondateur de Sun Microsystem (Solaris). Avant de créer sa société, il a également été l'auteur de vi, de la première pile TCP/IP de UNIX, et csh.]
+.
+En 1983, ksh ou Korn Shell, est écrit par David Korn, qui inclut certaines améliorations de csh et ajoute certaines manipulations qui étaient plutôt retrouvées dans les langages de programmation ou les utilitaires spécialisés comme awk ou sed.
+C'est le shell par défaut sur AIX.
+De nos jours, sous Linux, le shell par défaut le plus courant est bash : Bourne Again Shell, écrit par la Free Software Fondation en 1988.
+Il reprend beaucoup d'améliorations des précédents shell.
+
+.Une façon de connaître le shell utilisé
+[source, console]
+----
+$ echo $SHELL
+/bin/bash
+----
+
+.Une autre façon de connaître le shell utilisé
+[source, console]
+----
+$ echo $0
+-bash
+----
+
+===  Comment accéder au shell ?
+
+Votre shell (bash) doit être exécuté dans un terminal.
+Qu'est-ce que c'est que ça? Un terminal est simplement le logiciel qui va gérer les entrées au clavier et gérer l'affichage sur votre écran.
+Le shell lui, ne s'occupe que d'interpréter les commandes constituées par les lettres que le terminal lui envoi, ainsi que de dialoguer avec le kernel.
+Historiquement, un terminal est un ordinateur simplifié qui est juste capable de gérer l'affichage et les entrées au clavier.
+Il était connecté via un câble série (COM1, COM2 …) au serveur faisant tourner UNIX.
+
+//https://fr.wikipedia.org/wiki/RS-232#/media/File:Serial_port.jpg
+.Port série
+image::images/serial-port.jpg[Port série, 300, 300, link="images/serial-port.jpg", align="left"]
+
+Aujourd'hui, s'il est toujours possible de se connecter au terminal via un port COM, et c'est bien utile dans les cas de dépannage les plus désespérés (carte graphique HS par exemple), on accède presque toujours au shell via un terminal logiciel, ce qu'on appelle un terminal virtuel.
+Il en existe beaucoup.
+
+==== La console Linux
+
+Il y a tout d'abord un terminal que vous trouverez sur toutes les distributions, en pur mode texte et fourni directement par le kernel (pas besoin d'interface graphique).
+Vous le trouverez en appuyant sur les touches CTRL+ALT+F1 à F7.
+Vous retrouverez votre interface graphique, si elle est lancée, sur l'une de ces combinaisons.
+Traditionnellement, la console graphique se trouve sur CTRL+ALT+F7, mais cela peut varier d'une distribution à l'autre.
+Sur Fedora 20 vous la trouverez sur CTRL+ALT+F1.
+On l'utilise en général pour le dépannage car l'absence (par défaut) de souris pour les copier-coller et sa faible mémoire d'historique rend son utilisation moins conviviale.
+
+NOTE: Pour visualiser les pages précédentes en console texte, utilisez SHIFT droit + Page UP et Page Down
+
+====  Le terminal de l'environnement de bureau
+
+C'est le terminal qu'on utilisera le plus souvent.
+Chaque environnement de bureau en propose un.
+Pour Gnome, c'est gnome-terminal.
+Pour KDE c'est konsole,  etc.
+En général, depuis le menu applications, faites une recherche sur le mot-clé « terminal ».
+En cas de doute, l'icône devrait vous mettre sur la bonne voie.
+
+====  Les terminaux graphiques tiers
+
+Il y a toute sorte d'autres terminaux qui fonctionnent sur l'interface graphique et qui ne sont pas liés à une distribution ou un environnement de bureau.
+Vous avez par exemple xterm qui est l'un des plus ancien, rxvt qui a toujours ses aficionados, aterm, etc.
+
+====  Les terminaux graphiques de type drop-down
+
+Une série de terminaux se sont inspirés de la console du jeux vidéo Quake, qu'on pouvait faire apparaître au moyen de la touche « exposant 2 » (à gauche de la touche « chiffre 1 »).
+Ces terminaux sont très pratiques pour une utilisation quotidienne car en général, ils sont lancé automatiquement au démarrage de votre session graphique, et peuvent être appelé à tout moment en appuyant sur une touche définie (par exemple F12).
+Ils supportent en général les onglets.
+
+.Quelques terminaux drop-down
+[cols="1,4"]
+|===
+|Nom |Description
+
+|Guake
+|Fonctionne le mieux sur un bureau Gnome
+
+|Terra
+|Alternative à Guake. Également prévu pour Gnome.
+
+|Yakuake
+|Fonctionne le mieux sur un bureau KDE
+|===
+
+===  Qu'est ce que l'invite de commande ?
+
+Lorsque vous démarrez votre terminal, votre shell vous présente ce qu'on appelle une invite de commande (prompt en anglais).
+C'est à dire un petit texte qui reprend quelques informations, et un curseur clignotant vous indiquant à quel endroit va être affiché ce que vous allez taper au clavier.
+
+.L'invite de commande
+[source, console]
+----
+titi@ma-tour:~$
+----
+
+.Explication des éléments de l'invite de commande
+[cols="1,4"]
+|===
+|Nom |Description
+
+|titi
+|Indique l'utilisateur avec lequel vous êtes connecté
+
+|ma-tour
+|Le nom de l'ordinateur (hostname).
+
+|~
+|après les deux-points, le répertoire courant. Le tilde signifie la home directory footnote:[La home directory, ou répertoire utilisateur, est l'endroit où l'ensemble des fichiers appartenant à un utilisateur vont être stockés. C'est là qu'on va trouver les dossiers Documents, Images, Vidéos, Musiques, Téléchargements, etc. Mais aussi certains fichiers de configurations uniquement applicables à l'utilisateur.] de l'utilisateur courant (titi ici).
+
+.2+|$ ou #
+|$ - lorsque vous êtes un utilisateur sans droit d'administration.
+
+|# - lorsque vous êtes en root (super-user).
+|===
+
+NOTE: Signalons que l'arobase se dit "at" en anglais, ce qu'on peut traduire par « chez »,  « sur ». On pourrait donc construire une phrase avec l'ensemble de ces éléments: « je suis titi sur ma-tour dans ma home directory et je suis un utilisateur standard »
+
+Vous devez finalement savoir que le prompt peut-être personnalisé.
+Vous n'aurez donc peut-être pas exactement le même, selon la distribution sur laquelle vous vous trouvez, mais généralement, cela y ressemble fort.
+
+=== La complétion automatique
+
+Dans votre shell, appuyez sur la touche tabulation pour compléter automatiquement votre commande ou votre chemin.
+Le shell va essayer de déterminer les différentes possibilités.
+S'il n'y en a qu'une, il écrit le nom de la commande en entier ou le chemin complet.
+S'il y a plusieurs choix, taper rapidement deux fois sur TAB pour obtenir les différentes possibilités.
+
+."if" suivi d'un appui sur TAB - il ne se passe rien
+[source, console]
+----
+$ if #suivi d'un appui sur TAB
+----
+
+."if" suivi de deux appui rapide sur TAB fait apparaître les différentes possibilités
+[source, console]
+----
+$ if #suivi de deux appui sur TAB
+if	ifconfig	ifdown	ifnames	ifquery	ifup
+----
+
+.si on ajoute un c après if
+[source, console]
+----
+$ ifc #suivi d'une tabulation auto-complète la commande
+$ ifconfig
+----
+
+=== Linux est sensible à la casse !
+
+Le mot casse remonte au temps de l'imprimerie mécanique et signifiait un casier en bois où l'on rangeait les caractères en plomb d'un même type footnote:[Casse (typographie), Wikipédia : http://fr.wikipedia.org/wiki/Casse_(typographie)].
+En anglais on dit case sensitive (case avec un seul s).
+Par extension, on signifie aujourd'hui par ce terme que Linux (et les autres UNIX) font la différence entre un mot écrit en minuscule et en majuscule.
+Ifconfig ou IFconfig ou ifconfiG ne fonctionneront pas, car la commande est entièrement en minuscule : ifconfig.
+Il en va de même pour les répertoires et nom de fichiers !
+
+NOTE: Windows est insensible à la casse (ou case insensitive). Et c'est une source d'erreur fréquente lors de la découverte de Linux.
+
+=== Le copier-coller
+
+Dans un terminal graphique, lorsque vous effectuez une sélection avec la souris, il est automatiquement copié en mémoire.
+Vous pourrez le coller à tout moment en faisant : SHIFT+Insert.
+La plupart des terminaux permettent également d'utiliser le clic droit de la souris pour afficher un menu contextuel qui permet notamment le copier-coller, mais c'est plus fastidieux et donc généralement moins utilisé.

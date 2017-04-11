@@ -1,0 +1,308 @@
+== Les commandes de base
+
+Une commande est une application, un exécutable, qui a été conçu pour réaliser une tâche spécifique.
+C'est un petit programme qui fait une chose simple.
+On l'utilise en tapant son nom au clavier, et on l'exécute en appuyant sur la touche "enter".
+Vous devrez apprendre par coeur l'ensemble des commandes de base.
+
+
+=== Structure d'une commande
+
+Très souvent, on donne à une commande un ou plusieurs arguments qui précisent sur quel objet la tâche doit être effectuée : un fichier, un répertoire, une ip ...
+Les arguments sont donnés à la suite de la commande, et s'il y en a plusieurs, ils sont séparés par un espace (s'il y a plusieurs espaces ou une tabulation, cela fonctionne aussi).
+On peut généralement donner des options aux commandes : -v, -m, -l ...
+Les options ne définissent pas l'objet sur lequel porte la tâche, mais modifient la manière dont elle va être effectuée.
+Le sens et l'effet d'une option est propre et spécifique à chaque commande, bien qu'on retrouve parfois certaines options avec le même sens d'une commande à l'autre.
+
+[ditaa, "figures/struct-cmd"]
+....
+ +--------------+   +---------------+    +-------------+
+ |      ls      |   |      -h       |    |    /usr     |
+ +--------------+   +---------------+    +-------------+
+         ^                  ^                   ^
+         :                  :                   :
+         |                  |                   |
+     Commande             Option             Argument
+....
+
+Règles pour écrire une commande:
+
+ * Le premier "mot" est le nom de la commande
+ * Tout les autres mots qui viennent à suite sont soit des options soit des arguments
+ * Une option commence par un ou deux tirets
+ * Un argument est un mot qui ne commence pas par un ou plusieurs tirets
+ * Tous ces éléments sont séparé par un ou plusieurs espaces
+
+=== cd – Change Directory
+
+`cd` est l'acronyme de Change Directory (changer de répertoire).
+C'est la commande qui vous permettra de naviguer dans le système de fichier et de changer votre répertoire courant.
+Donnez en argument l'emplacement vers lequel vous voulez vous rendre.
+
+.`cd /` vous amène à la racine du système de fichier
+[source, console]
+----
+$ cd /
+----
+
+IMPORTANT: Notez que contrairement à Windows, le séparateur de chemin est le slash / et non le backslash \
+
+===  ls – List
+
+`ls` liste les répertoires et les fichiers de votre arborescence.
+
+====  Sans argument
+
+.Sans argument, la commande ls permet de lister le contenu du répertoire courant
+[source, console]
+----
+$ cd /usr
+$ ls
+bin  games  include  lib  lib32  local  sbin  share  src
+----
+
+====  Les arguments et l'affichage "long"
+
+En donnant à ls le répertoire /usr en argument, il affiche son contenu.
+
+.Un répertoire en argument
+[source, console]
+----
+$ ls /usr
+bin  games  include  lib  lib32  local  sbin  share  src
+----
+
+On peut faire de même pour un fichier, mais sans autre option, cela aura juste pour effet d'afficher le nom du fichier, ce qui n'est pas très intéressant.
+
+.Un fichier en argument
+[source, console]
+----
+$ ls /etc/fstab
+/etc/fstab
+----
+
+L'option `-l` pour « long » permet d'afficher une série d'informations sur chacun des fichiers et répertoires à lister.
+Exécuter un ls sur un fichier a alors plus de sens.
+
+.L'option `-l` affiche plus d'informations
+[source, console]
+----
+$ ls -l /etc/fstab
+-rw-r--r-- 1 root root 1004 fév  1  2013 /etc/fstab
+----
+
+.Description de la sortie de la commande
+[cols="1,4"]
+|===
+|Nom |Description
+
+|`-rw-r\--r--`
+|Les permissions sur le fichier. Nous verrons cela en détail plus tard.
+
+|`1`
+|Indique le nombre de hard links pointant vers ce fichier.
+
+|`root`
+|L'utilisateur propriétaire du fichier.
+
+|`root`
+|Le groupe propriétaire du fichier.
+
+|`1004`
+|La taille en octets.
+
+|`fév 1 2013`
+|La date de la dernière modification du fichier.
+
+|`/etc/fstab`
+|Le nom du fichier.
+|===
+
+Un ls -l sur un répertoire nous affiche donc le contenu avec les détails.
+
+.L'option `-l` avec un répertoire en argument affiche les détails sur le contenu du répertoire
+[source, console]
+----
+ls -l /usr
+total 188
+drwxr-xr-x   2 root root 81920 avr  7 19:52 bin
+drwxr-xr-x   2 root root  4096 mar 31 19:50 games
+drwxr-xr-x  61 root root 20480 avr  2 19:56 include
+drwxr-xr-x 215 root root 36864 avr  7 19:52 lib
+drwxr-xr-x   5 root root  4096 nov 19 23:12 lib32
+drwxr-xr-x  11 root root  4096 fév 15  2013 local
+drwxr-xr-x   2 root root 12288 avr  2 19:56 sbin
+drwxr-xr-x 409 root root 16384 avr  2 18:32 share
+drwxr-xr-x  13 root root  4096 avr  2 19:56 src
+----
+
+Oui mais, comment faire si on souhaite afficher les détails du répertoire lui-même et non son contenu ? Il faut utiliser l'option -d pour directory.
+
+.L'option `-l` avec un répertoire en argument affiche les détails sur le contenu du répertoire
+[source, console]
+----
+$ ls -ld /usr
+drwxr-xr-x 11 root root 4096 fév  1  2013 /usr
+----
+
+==== Human readable please!
+
+Avec l'option -h, Il est également possible d'afficher la taille des fichiers en utilisant des unités de mesure plus intuitives pour nous : Go, Mo ...
+
+.L'option `-h` nous montre la taille du noyau Linux: 5,1 Mo.
+[source, console]
+----
+$ ls -lh /boot/vmlinuz-3.13.7-200.fc20.x86_64
+-rwxr-xr-x. 1 root root 5.1M Mar 24 23:09 /boot/vmlinuz-3.13.7-200.fc20.x86_64
+----
+
+====  Les fichiers cachés
+
+En ajoutant l'option « a » (pour all), ls liste également les fichiers cachés.
+
+.L'option `-a` permet d'afficher les fichiers cachés
+[source, console]
+----
+$ cd /usr
+$ ls -a
+.  ..  bin  games  include  lib  lib32  local  sbin  share  src
+----
+
+Dans notre exemple les seuls fichiers cachés sont les répertoires spéciaux dont nous avons parlés précédemment, qui représentent le répertoire courant et parent.
+
+NOTE: Les fichiers (et répertoires) cachés sous Linux, sont simplement des fichiers qui commencent par un point.
+C'est une convention.
+Bien entendu, ce n'est pas une fonctionnalité liée à la sécurité : cela n'empêche personne d'afficher et d'accéder aux fichiers cachés.
+Le système de permission qu'on verra plus tard est là pour ça.
+Il s'agit plutôt d'une fonctionnalité qui facilite l'utilisation quotidienne : au lieu  d'avoir un répertoire encombré de fichiers de toutes sortes, ceux qui sont propres au système et aux diverses configurations sont cachés, et ne s'affichent pas par défaut.
+Il en va de même dans l'interface graphique : le navigateur de fichiers n'affiche pas, par défaut, les fichiers cachés.
+
+=== pwd – Print Working Directory
+
+`pwd` affiche votre répertoire de travail autrement appelé répertoire courant.
+Il n'y a jamais qu'un seul répertoire courant à un même moment.
+Si vous êtes perdu et que vous ne savez plus où vous êtes dans le système de fichier, utilisez pwd sans modération.
+
+.pwd vous indique où vous vous trouvez
+[source, console]
+----
+$ pwd
+/home/titi
+----
+
+=== Changer d'utilisateur
+
+==== su – Switch User
+
+Switch user veut dire: changer d'utilisateur.
+Cette commande vous permet de vous logger avec un autre utilisateur.
+Vous aurez bien entendu besoin de son mot de passe.
+On utilise ici la commande "who" qui permet de connaître l'utilisateur courant.
+
+.L'utilisateur titi devient l'utilisateur toto.
+[source, console]
+----
+$ who
+titi
+$ su - toto
+Password:
+toto@matour:~$
+----
+
+IMPORTANT: On doit utiliser le tiret comme option de "su" afin de charger l'environnement de l'utilisateur de destination, comme si on s'était connecté directement avec cet utilisateur.
+
+Cette commande vous permet également de devenir l'utilisateur root qui est l'utilisateur administrateur du système.
+Pour ce faire, ne donnez pas d'argument à la commande.
+
+.Sans argument, vous vous loggez avec l'utilisateur root
+[source, console]
+----
+$ who
+titi
+$ su -
+Password :
+root@matour:~#
+----
+
+NOTE: Lorsque vous êtes root, vous pouvez switcher sur n'importe quel utilisateur standard sans que son mot de passe vous soit demandé!
+
+==== sudo
+
+Vous verrez souvent la commande « sudo » dans les tutoriels sur internet.
+Cette commande est différente de « su ».
+« su » permet de se logger avec un autre utilisateur.
+« sudo » permet de vous donner les droits d'administration de votre machine (équivalent aux droits root).
+Votre utilisateur doit être référencé dans la configuration du système pour avoir le droit d'utiliser la commande « sudo » - tous les utilisateurs n'y ont pas accès.
+Si c'est l'utilisateur que vous avez créé lors de l'installation de Linux, il y a de forte chances qu'il ait le droit de faire un sudo.
+Souvent ce droit est acquis lorsque votre utilisateur est membre d'un groupe d'administrateurs.
+Sur Ubuntu, c'est souvent le groupe « admin ».
+Sur Centos, c'est souvent le groupe « wheel ».
+Il y a deux façons d'utiliser « sudo ».
+ * Lorsque vous êtes utilisateur normal, vous ajoutez « sudo » devant toute commande qui nécessite des droits « root » et vous aurez les droits uniquement pour l'exécution de cette commande.
+ * Vous faites un « sudo -i » et vous devenez utilisateur « root » - c'est l'équivalent du « su - root »
+
+.Devenir root avec l'option `-i` de la commande sudo
+[source, console]
+----
+$ who
+titi
+$ sudo -i
+Password :
+root@matour:~#
+----
+
+====  exit – logout
+
+Lorsque vous utilisez `su` ou `sudo -i`, vous créez un nouveau shell.
+Mais cela ne remplace pas l'ancien.
+C'est en fait une connexion en cascade.
+Si je vous montre les processus (qu'on n'a pas encore vu), voilà à quoi ressemble plusieurs `su -` fait d'affilée.
+
+.Visualisation de l'imbrication des sous-shels
+[source, console]
+----
+ \_ -
+     \_ sudo -i
+         \_ -bash
+              \_ su -
+                 \_ -su
+                     \_ su -
+                          \_ -su
+                              \_ su -
+                                   \_ -su
+----
+
+Pour sortir de cette connexion et revenir à la précédente, la première méthode est d'entrer la commande `exit`.
+
+.La commande `exit`
+[source, console]
+----
+root@matour:~# exit
+logout
+titi@matour:~$
+----
+
+L'autre méthode est d'utiliser le raccourci clavier `ctrl-d`.
+
+.Le raccourci clavier `ctrl-d`
+[source, console]
+----
+root@matour:~# logout
+titi@matour:~$
+----
+
+=== Arrêter le système
+
+Deux commandes vous permettent d'arrêter le système. La commande `halt` et la commande `shutdown`.
+
+.Éteindre avec la commande `halt`
+[source, console]
+----
+root@matour:~# halt -p
+----
+
+.Éteindre avec la commande `shutdown`
+[source, console]
+----
+root@matour:~# shutdown -h now
+----

@@ -1,0 +1,31 @@
+== Comment est né UNIX ?
+
+=== Les premiers pas
+
+Pour comprendre comment et pourquoi UNIX est né, il faut d’abord essayer de se remettre dans le contexte et comprendre où en était l’informatique dans les années 50 et 60.
+Il s’agissait d’énormes machines prenant la place d’une très grande pièce et pesant plusieurs tonnes.
+Bien entendu leur taille diminuait d’années en années, mais cela restait des machines très coûteuses, uniquement accessibles aux états, aux universités, aux plus grandes entreprises, et qui demandait des réparations et un entretient quotidien.
+Ces machines-là ressemblaient fort aux machines industrielles: constituées d’un grand nombre de parties mécaniques.
+Elles étaient lentes par rapport à aujourd’hui.
+Pour économiser le temps machine, au lieu d’encoder directement les programmes informatiques sur un clavier relié à l’ordinateur, les informaticiens encodaient les programmes sur des cartes perforées de 80 colonnes, 8 bits par colonne.
+
+//https://commons.wikimedia.org/wiki/File:Blue-punch-card-front.png
+.Une carte perforée 80 colonnes d'IBM d'un des types les plus utilisés au xxe siècle.
+image::images/punch-card.png[IBM Punch Card, 300, 200, align="left", link="images/punch-card.png"]
+
+Une carte ou un ensemble de cartes perforées, selon la complexité, représentaient un programme, qui était chargé en mémoire, exécuté, pour finalement fournir le résultat via une imprimante, un écran ou une autre carte perforée pour une utilisation future.
+La chose importante à retenir est que ces ordinateurs ne pouvaient exécuter qu’un seul programme à la fois.
+Pour optimiser le rendement, les ingénieurs préparaient des batchs
+footnote:[batch qui signifie en anglais: lot, paquet.]
+, c’est à dire une compilation d’un ensemble de carte perforées (plusieurs programmes) sur une bande de plus grande longueur.
+De cette manière, l’ordinateur pouvait charger et exécuter programme après programme rapidement, sans intervention humaine pour insérer chaque nouvelle carte perforée.
+Il faut également savoir que s’il y avait la moindre erreur dans un programme, son exécution était stoppée.
+Il fallait donc corriger, puis réintégrer la nouvelle version dans le prochain batch.
+En 1957, un ingénieur d’IBM, Robert William Bemer
+footnote:[Robert William Bemer a été un ingénieur de son temps fort actif: outre le concept du time-sharing, il a créé le code ASCII, il a participé à l’élaboration du langage COBOL, il a été le premier en 1971 à anticiper le bug de l’an 2000.]
+, publie pour la première fois le concept du temps-partagé: plutôt que d’exécuter un seul programme à la fois, il propose qu'un grand nombre de terminaux pourraient être connectés au même moment au serveur central (au main frame), et que chaque utilisateur puisse avoir la possibilité d'interagir directement et d’entrer son code au clavier.
+Il a pris pour hypothèse que le grand nombre d’utilisateurs simultané aurait pour effet de diminuer les périodes idle (au repos) du processeur central, tout en procurant aux utilisateurs plus de flexibilité car ils ne doivent pas attendre que leur programme soit intégré dans un batch.
+Il peuvent l’écrire et l’exécuter en temps réel.
+D’un point de vue technique, la difficulté réside dans la création d’un système d’exploitation capable de gérer l’exécution d’un grand nombre de programmes simultanément au moyen d’un seul processeur.
+Il faut pouvoir interrompre et reprendre l’exécution pendant une courte durée des différents processus afin de les traiter en alternance et de donner l’impression aux utilisateurs que leur programme est exécuté en temps réel.
+Cela implique notamment de sauvegarder l’état de chaque programme en mémoire, composant qui était très coûteux à l’époque.

@@ -1,4 +1,0 @@
-#! /bin/bash
-
-asciidoctor-pdf -r asciidoctor-diagram linux-syllabus.adoc
-asciidoctor -r asciidoctor-diagram linux-syllabus.adoc
