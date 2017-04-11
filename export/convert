@@ -3,5 +3,6 @@
 main_file=index.adoc
 output=admin-linux
 
-asciidoctor-pdf -r asciidoctor-diagram -o $output.pdf ../$main_file
-asciidoctor -r asciidoctor-diagram -o $output.html ../$main_file
+cd ..
+asciidoctor-pdf -r asciidoctor-diagram -o $output.pdf $main_file
+asciidoctor -r asciidoctor-diagram -o $output.html $main_file

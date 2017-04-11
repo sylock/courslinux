@@ -8,8 +8,14 @@ Nicolas Michel
 
 include::comment-est-ne-unix.adoc[]
 
+<<<
 include::les-distributions-linux.adoc[]
 
+<<<
 include::le-shell.adoc[]
 
+<<<
 include::les-commandes-de-base.adoc[]
+
+<<<
+include::bibliographie.adoc[]
