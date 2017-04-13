@@ -65,7 +65,6 @@ digraph paths {
 }
 ----
 
-
 .Description des principales distributions
 [cols="1,1,1,4"]
 |===

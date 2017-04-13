@@ -1,4 +1,3 @@
-
 = Administration de systèmes Linux
 {localdate}
 Nicolas Michel
@@ -16,6 +15,9 @@ include::le-shell.adoc[]
 
 <<<
 include::les-commandes-de-base.adoc[]
+
+<<<
+include::concepts-et-operations-sur-le-systeme-de-fichiers.adoc[]
 
 <<<
 include::bibliographie.adoc[]

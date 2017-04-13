@@ -1,0 +1,217 @@
+==  Concepts et opérations sur le système de fichiers
+
+// d'abord voir les différentes commandes et parler des . et .. après - idem pour chemins relatifs et absolus
+
+===  Le répertoire spécial nommé ..
+
+Le noyaux Linux crée automatiquement, pour chaque répertoire du système, un répertoire spécial qui facilite la navigation.
+Le répertoire "point, point" permet de se déplacer dans le répertoire parent.
+Dans l'exemple suivant, nous nous trouvons toujours dans la home directory de l'utilisateur titi.
+L'utilisation du répertoire "deux-point" en argument à la commande cd nous permet de nous déplacer dans le répertoire qui se trouve un niveau au-dessus dans la hiérarchie du système de fichier, /home.
+
+.Remonter au répertoire parent
+[source, console]
+----
+$ pwd
+/home/titi
+$ cd ..
+$ pwd
+/home
+----
+
+===  Le répertoire spécial nommé .
+
+Le « point » simple désigne le répertoire courant, c'est à dire le répertoire dans lequel on se trouve actuellement.
+
+.Se déplacer dans le répertoire courant nous amène ... au même endroit!
+[source, console]
+----
+$ pwd
+/home/titi
+$ cd .
+$ pwd
+/home/titi
+----
+
+=== Les chemins relatifs et absolu
+
+On distingue deux façons de spécifier un chemin :
+Relatif : il est construit à partir du répertoire courant (qu'on peut connaître avec la commande pwd)
+Absolu : il démarre de la racine (/).
+Un chemin absolu commencera donc toujours par un « / ».
+Le seul objectif est de vous faciliter la vie en diminuant la quantité de caractères à taper au clavier.
+On utilisera l'une ou l'autre méthode en fonction de son emplacement actuel et de la destination souhaitée.
+Dans certain cas, la longueur du chemin sera plus courte avec un chemin absolu, dans d'autres avec un chemin relatif.
+
+NOTE: Les deux méthodes permettent toujours d'arriver à la même destination. Seule la longueur du chemin à taper changera.
+
+Admettons que je me trouve dans le répertoire /usr.
+Si je souhaite me rendre dans le répertoire /usr/games, le plus simple est d'utiliser un chemin relatif.
+
+==== Premier exemple
+
+.Se déplacer depuis /usr vers /usr/games au moyen d'un chemin relatif
+[source, console]
+----
+$ pwd
+/usr
+$ cd games
+$ pwd
+/usr/games
+----
+
+.Déplacement relatif schématisé
+[graphviz, "figures/chemin-relatif-1", svg]
+----
+digraph paths {
+        graph [overlap = false];
+        node [shape=folder];
+
+		usr[color=red]
+		"/"  -> { usr lib root home } [arrowhead=none];
+		home -> { toto x41} [arrowhead=none];
+		usr -> { games bin usrlib[label=lib] } [arrowhead=none];
+
+		usr  -> games [headlabel=" cd games" color=blue fontcolor=blue tailport=w headport=n labeldistance=5 labelangle=40];
+
+		{ rank=same; usr; lib ; root ; home }
+		{ rank=same; x41; toto ; games ; bin ; usrlib }
+}
+----
+
+Pour obtenir le même résultat en écriture absolue, nous aurions dû entrer cette suite de commandes.
+
+.Déplacement absolu schématisé
+[source, console]
+----
+$ pwd
+/usr
+$ cd /usr/games
+$ pwd
+/usr/games
+----
+
+Remarquez la différence: en relatif nous avions `cd games`, en absolu nous avons `cd /usr/games`.
+
+.Se déplacer depuis /usr vers /usr/games au moyen d'un chemin absolu
+[graphviz, "figures/chemin-absolu-1", svg]
+----
+digraph paths {
+        graph [overlap = false];
+        node [shape=folder];
+
+		usr[color=red]
+		"/"  -> { usr lib root home } [arrowhead=none];
+		home -> { toto x41} [arrowhead=none];
+		usr -> { games bin usrlib[label=lib] } [arrowhead=none];
+
+        "/"  -> games [headlabel=" cd /usr/games" color=blue fontcolor=blue tailport=w headport=n labeldistance=9 labelangle=25];
+
+		{ rank=same; usr; lib ; root ; home }
+		{ rank=same; x41; toto ; games ; bin ; usrlib }
+}
+----
+
+Si nous résumons les deux stratégies pour ce cas de figure, la méthode relative permet d'obtenir le même résultat avec 8 caractères au lieu de 13 pour la méthode absolue.
+
+.Comparatif entre le chemin relatif et absolu
+|===
+|Méthode|Commande|Nombre de caractères
+
+|Relatif
+|`cd games`
+|8
+
+|Absolu
+|`cd /usr/games`
+|13
+|===
+
+==== Deuxième exemple
+
+Je me trouve toujours dans le répertoire /usr et je souhaite me rendre dans /root.
+Essayons en chemin relatif.
+
+.Déplacement depuis /usr vers /root avec un chemin relatif
+[source, console]
+----
+$ pwd
+/usr
+$ cd ../root
+$ pwd
+/root
+----
+
+.Se déplacer depuis /usr vers /root au moyen d'un chemin relatif
+[graphviz, "figures/chemin-relatif-2", svg]
+----
+digraph paths {
+        graph [overlap = false];
+        node [shape=folder];
+
+		usr[color=red]
+		"/"  -> { usr lib root home } [arrowhead=none];
+		home -> { toto x41} [arrowhead=none];
+		usr -> { games bin usrlib[label=lib] } [arrowhead=none];
+
+        "/"  -> usr [headlabel=" cd .." dir=back color=blue fontcolor=blue tailport=w headport=n labeldistance=3 labelangle=40];
+        "/"  -> root [headlabel=" cd root" color=blue fontcolor=blue tailport=e headport=n labeldistance=3 labelangle=-40];
+
+		{ rank=same; usr; lib ; root ; home }
+		{ rank=same; x41; toto ; games ; bin ; usrlib }
+}
+----
+
+NOTE: On aurait pu faire cette manipulation en deux commandes : +
+`$ pwd` +
+`/usr` +
+`$ cd ..` +
+`$ cd root` +
+Dans l'exemple, plutôt que d'avoir utilisé deux fois la commande cd, nous l'avons utilisé une seule fois en spécifiant le `..` d'abord et le `root` ensuite, séparé par le slash :
+`../root`, afin d'économiser le nombre de caractères.
+
+Le même déplacement en chemin absolu aurait donné ceci.
+
+.Déplacement depuis /usr vers /root avec un chemin absolu
+[source, console]
+----
+$ pwd
+/usr
+$ cd /root
+$ pwd
+/root
+----
+
+.Se déplacer depuis /usr vers /root au moyen d'un chemin absolu
+[graphviz, "figures/chemin-absolu-2", svg]
+----
+digraph paths {
+        graph [overlap = false];
+        node [shape=folder];
+
+		usr[color=red]
+		"/"  -> { usr lib root home } [arrowhead=none];
+		home -> { toto x41} [arrowhead=none];
+		usr -> { games bin usrlib[label=lib] } [arrowhead=none];
+
+        "/"  -> root [headlabel=" cd /root" color=blue fontcolor=blue tailport=e headport=n labeldistance=4 labelangle=-40];
+
+		{ rank=same; usr; lib ; root ; home }
+		{ rank=same; x41; toto ; games ; bin ; usrlib }
+}
+----
+
+Dans ce cas et contrairement au premier exemple, la méthode absolue est la plus courte.
+
+.Comparatif entre le chemin relatif et absolu
+|===
+|Méthode|Commande|Nombre de caractères
+
+|Relatif
+|`cd ../root`
+|10
+
+|Absolu
+|`cd /root`
+|8
+|===

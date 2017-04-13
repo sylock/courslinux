@@ -274,7 +274,7 @@ Si je vous montre les processus (qu'on n'a pas encore vu), voilà à quoi ressem
 
 Pour sortir de cette connexion et revenir à la précédente, la première méthode est d'entrer la commande `exit`.
 
-.La commande `exit`
+.La commande `exit` ferme la session de root et reviens à la session de titi
 [source, console]
 ----
 root@matour:~# exit
@@ -298,11 +298,27 @@ Deux commandes vous permettent d'arrêter le système. La commande `halt` et la 
 .Éteindre avec la commande `halt`
 [source, console]
 ----
-root@matour:~# halt -p
+$ halt -p
 ----
 
 .Éteindre avec la commande `shutdown`
 [source, console]
 ----
-root@matour:~# shutdown -h now
+$ shutdown -h now
+----
+
+=== Redémarrer le système
+
+Deux commandes vous permettent le redémarrage de votre système d'exploitation: reboot et shutdown avec l'option -r.
+
+.Redémarrage au moyen de la commande `reboot`
+[source, console]
+----
+$ reboot
+----
+
+.Redémarrage au moyen de la commande `shutdown`
+[source, console]
+----
+$ shutdown -r now
 ----
