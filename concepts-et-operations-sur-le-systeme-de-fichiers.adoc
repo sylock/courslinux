@@ -186,18 +186,18 @@ $ pwd
 [graphviz, "figures/chemin-absolu-2", svg]
 ----
 digraph paths {
-        graph [overlap = false];
-        node [shape=folder];
+    graph [overlap = false];
+    node [shape=folder];
 
-		usr[color=red]
-		"/"  -> { usr lib root home } [arrowhead=none];
-		home -> { toto x41} [arrowhead=none];
-		usr -> { games bin usrlib[label=lib] } [arrowhead=none];
+    usr[color=red]
+    "/"  -> { usr lib root home } [arrowhead=none];
+    home -> { toto x41} [arrowhead=none];
+    usr -> { games bin usrlib[label=lib] } [arrowhead=none];
 
-        "/"  -> root [headlabel=" cd /root" color=blue fontcolor=blue tailport=e headport=n labeldistance=4 labelangle=-40];
+    "/"  -> root [headlabel=" cd /root" color=blue fontcolor=blue tailport=e headport=n labeldistance=4 labelangle=-40];
 
-		{ rank=same; usr; lib ; root ; home }
-		{ rank=same; x41; toto ; games ; bin ; usrlib }
+    { rank=same; usr; lib ; root ; home }
+  { rank=same; x41; toto ; games ; bin ; usrlib }
 }
 ----
 
