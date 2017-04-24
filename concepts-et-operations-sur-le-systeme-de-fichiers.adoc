@@ -215,3 +215,51 @@ Dans ce cas et contrairement au premier exemple, la méthode absolue est la plus
 |`cd /root`
 |8
 |===
+
+=== cd et les arguments spéciaux
+Dans tous les exemples que nous venons de voir, nous avons toujours donné comme argument à la commande cd, un chemin, qu'il soit relatif ou absolu.
+
+==== cd sans argument
+Il est possible d'utiliser « cd » sans aucun argument.
+Auquel cas, nous nous déplaçons dans la home directory de l'utilisateur courant.
+Si je suis connecté avec l'utilisateur "titi" et que je me trouve initialement à la racine du système de fichier, utiliser "cd" me déplace dans ma home directory.
+
+.cd sans argument déplace dans la home directory
+[source, console]
+----
+$ pwd
+/
+$ cd
+$ pwd
+/home/titi
+----
+
+==== cd \~
+Il est également possible d'utiliser le tilde pour obtenir le même résultat.
+Le tilde est le caractère en forme de vague \~ se trouvant sur la touche = d'un clavier belge.
+Pour pouvoir le former, faites ALT GR + "="" suivi d'un appui sur la barre d'espacement.
+
+.cd suivit du tilde déplace également dans la home directory
+[source, console]
+----
+$ pwd
+/
+$ cd ~
+$ pwd
+/home/titi
+----
+
+L'attrait principal du tilde est qu'il peut-être concaténé (collé) au nom d'un utilisateur, auquel cas le shell l’interprète comme une représentation de la home directory de l'utilisateur spécifié et plus de l'utilisateur courant.
+Dans l'exemple ci-dessous, l'utilisateur titi se déplace dans la home directory de l'utilisateur toto.
+
+.L'arugment tilde suivit d'un nom d'utilisateur déplace dans sa home directory
+[source, console]
+----
+$ whoami # Permet de connaître l'utilisateur courant
+titi
+$ pwd
+/home/titi
+$ cd ~toto
+$ pwd
+/home/toto
+----

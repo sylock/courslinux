@@ -143,7 +143,7 @@ titi@ma-tour:~$
 |ma-tour
 |Le nom de l'ordinateur (hostname).
 
-|~
+|\~
 |après les deux-points, le répertoire courant. Le tilde signifie la home directory footnote:[La home directory, ou répertoire utilisateur, est l'endroit où l'ensemble des fichiers appartenant à un utilisateur vont être stockés. C'est là qu'on va trouver les dossiers Documents, Images, Vidéos, Musiques, Téléchargements, etc. Mais aussi certains fichiers de configurations uniquement applicables à l'utilisateur.] de l'utilisateur courant (titi ici).
 
 .2+|$ ou #

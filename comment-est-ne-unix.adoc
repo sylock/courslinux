@@ -9,7 +9,7 @@ Ces machines-là ressemblaient fort aux machines industrielles: constituées d�
 Elles étaient lentes par rapport à aujourd’hui.
 Pour économiser le temps machine, au lieu d’encoder directement les programmes informatiques sur un clavier relié à l’ordinateur, les informaticiens encodaient les programmes sur des cartes perforées de 80 colonnes, 8 bits par colonne.
 
-//https://commons.wikimedia.org/wiki/File:Blue-punch-card-front.png
+//https://upload.wikimedia.org/wikipedia/commons/4/4c/Blue-punch-card-front-horiz.png
 .Une carte perforée 80 colonnes d'IBM d'un des types les plus utilisés au xxe siècle.
 image::images/punch-card.png[IBM Punch Card, 300, 300, align="left", link="images/punch-card.png"]
 
