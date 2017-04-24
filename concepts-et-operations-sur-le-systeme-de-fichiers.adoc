@@ -252,7 +252,7 @@ $ pwd
 L'attrait principal du tilde est qu'il peut-être concaténé (collé) au nom d'un utilisateur, auquel cas le shell l’interprète comme une représentation de la home directory de l'utilisateur spécifié et plus de l'utilisateur courant.
 Dans l'exemple ci-dessous, l'utilisateur titi se déplace dans la home directory de l'utilisateur toto.
 
-.L'arugment tilde suivit d'un nom d'utilisateur déplace dans sa home directory
+.Le tilde suivit d'un nom d'utilisateur déplace dans la home directory de l'utilisateur spécifié
 [source, console]
 ----
 $ whoami # Permet de connaître l'utilisateur courant
@@ -263,3 +263,43 @@ $ cd ~toto
 $ pwd
 /home/toto
 ----
+
+==== cd -
+
+Le tiret (ou dash en anglais) permet de se déplacer dans le répertoire précédent (attention, précédent ne veut pas dire parent!).
+C'est une sorte d'historique.
+
+.Le tiret permet de retourner au répertoire courant précédent
+[source, console]
+----
+$ pwd
+/usr/games
+$ cd /lib/modules
+$ pwd
+/lib/modules
+$ cd -
+$ pwd
+/usr/games
+----
+
+==== touch
+
+Cette commande, utilisée sur un répertoire ou fichier existant, met à jours le timestamp
+footnote::[Un timestamp est traduit par « horodatage » en français. Voici ce que wikipédia en dit : L'horodatage (en anglais timestamping) est un mécanisme qui consiste à associer une date et une heure à un événement, une information ou une donnée informatique.
+http://fr.wikipedia.org/wiki/Horodatage]
+de la dernière modification du fichier ou répertoire à l'heure courante, information qu'on a déjà pu  découvrir avec la commande ls -l.
+
+.Le tiret permet de retourner au répertoire courant précédent
+[source, console]
+----
+$ date
+Sat Apr 12 20:12:42 CEST 2014
+$ ls -ld ~
+drwxr-xr-x 59 titi titi 4096 avr 12 19:09 /home/titi
+$ touch ~
+$ ls -ld ~
+drwxr-xr-x 59 titi titi 4096 avr 12 20:12 /home/titi
+----
+
+Ce qui nous intéressera, c'est que si lui donne en argument un fichier qui n'existe pas, il le crée (sans aucune informations – c'est un fichier vide).
+C'est une commande pratique pour faire des exercices, et créer rapidement une série de fichiers.
