@@ -21,6 +21,7 @@ image::images/serial-port.jpg[Port série, 300, 300, link="images/serial-port.jp
 [cols="1,1,1,4"]
 |===
 |Nom |Parenté |Bureau par défaut |Description
+|===
 
 == Search and Replace
 

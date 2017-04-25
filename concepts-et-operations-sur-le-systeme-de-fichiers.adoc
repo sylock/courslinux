@@ -234,9 +234,9 @@ $ pwd
 /home/titi
 ----
 
-==== cd \~
+==== cd ~
 Il est également possible d'utiliser le tilde pour obtenir le même résultat.
-Le tilde est le caractère en forme de vague \~ se trouvant sur la touche = d'un clavier belge.
+Le tilde est le caractère en forme de vague ~ se trouvant sur la touche = d'un clavier belge.
 Pour pouvoir le former, faites ALT GR + "="" suivi d'un appui sur la barre d'espacement.
 
 .cd suivit du tilde déplace également dans la home directory
@@ -282,7 +282,7 @@ $ pwd
 /usr/games
 ----
 
-==== touch
+=== touch
 
 Cette commande, utilisée sur un répertoire ou fichier existant, met à jours le timestamp
 footnote::[Un timestamp est traduit par « horodatage » en français. Voici ce que wikipédia en dit : L'horodatage (en anglais timestamping) est un mécanisme qui consiste à associer une date et une heure à un événement, une information ou une donnée informatique.
@@ -303,3 +303,342 @@ drwxr-xr-x 59 titi titi 4096 avr 12 20:12 /home/titi
 
 Ce qui nous intéressera, c'est que si lui donne en argument un fichier qui n'existe pas, il le crée (sans aucune informations – c'est un fichier vide).
 C'est une commande pratique pour faire des exercices, et créer rapidement une série de fichiers.
+
+=== mkdir – Make Directory
+
+Cette commande permet la création de répertoire.
+Il prend en argument le ou les répertoires à créer.
+
+.Exemple de création de trois répertoires en même temps: bli, bla et blu
+[source, console]
+----
+$ pwd
+/home/titi
+$ mkdir bli bla blu
+$ ls
+bli bla blu Bureau  Documents  Images  Modèles  Musique  Public  Téléchargements  Vidéos
+----
+
+Si vous donnez un chemin (relatif ou absolu), mkdir s'attend à ce que l'entièreté du chemin existe, sauf le dernier élément.
+
+.Par défaut, mkdir ne crée que le répertoire final d'un chemin donné.
+[source, console]
+----
+$ mkdir /home/titi/bla/tic
+$ ls /home/titi/bla/
+tic
+----
+
+Si un ou plusieurs répertoire n'existent pas, mkdir renverra une erreur en expliquant qu'il n'est pas parvenu à le créer car le chemin n'existe pas.
+
+.Exemple d'erreur lorsque ce n'est pas le cas
+[source, console]
+----
+$ mkdir /home/titi/existe_pas/tic
+mkdir: cannot create directory '/home/titi/existe_pas/tic': No such file or directory
+----
+
+Et si je veux créer tous les répertoires qui n'existent pas en une fois ?
+Et bien, c'est possible en donnant à mkdir l'option -p (p pour parents).
+Il créera alors tous les répertoires manquants.
+
+.Avec -p, c'est néanmoins possible!
+[source, console]
+----
+$ mkdir -p /home/titi/existe_pas/tic
+$ ls -R /home/titi/existe_pas/
+/home/titi/existe_pas/:
+tic
+
+/home/titi/existe_pas/tic:
+$
+----
+
+Nous voyons que /home/titi/existe_pas a été créé.
+Qu'il contient le répertoire tic qui a également été créé, et que ce dernier est vide.
+
+===  cp – copy
+
+cp permet de copier les fichiers.
+Le premier argument est le fichier à copier et le deuxième le nom du nouveau fichier.
+
+.Copie d'un fichier avec cp
+[source, console]
+----
+$ cp /tmp/fichier-concat /tmp/fichier-concat-copie
+$ ls /tmp/fichier-concat-copie
+/tmp/fichier-concat-copie
+----
+
+Si la destination est juste un chemin, sans spécifier le nom du fichier, cp conserve le nom du fichier original.
+Nous copions dans l'exemple suivant fichier-concat dans la home directory du user (qui est titi).
+
+.Copie d'un fichier vers un répertoire
+[source, console]
+----
+$ cp /tmp/fichier-concat ~
+$ ls ~/fichier-concat
+/tmp/fichier-concat
+----
+
+=== mv – move
+
+Move qui veut dire bouger, permet de déplacer (et non plus copier) un fichier d'un endroit vers un autre.
+On spécifie alors le répertoire de destination.
+
+.Déplacement du fichier fichier-concat dans le répertoire créé
+[source, console]
+----
+$ ls /tmp/fichier-concat
+/tmp/fichier-concat
+$ mkdir /tmp/mon_repertoire
+$ mv /tmp/fichier-concat /tmp/mon_repertoire
+$ ls /tmp/mon_repertoire/fichier-concat
+/tmp/mon_repertoire/fichier-concat
+----
+
+C'est aussi avec mv qu'on peut renommer un fichier.
+
+.Renommage d'un fichier
+[source, console]
+----
+$ cd /tmp/mon_repertoire
+$ ls
+fichier-concat
+$ mv fichier-concat fichier-concat-nouveau
+$ ls
+fichier-concat-nouveau
+----
+
+On peut également spécifier plusieurs fichiers à déplacer.
+Dans ce cas le dernier argument défini le répertoire de destination où tous les fichiers précédents seront placés.
+
+.Déplacement de multiples fichiers vers un même répertoire
+[source, console]
+----
+$ cd /tmp
+$ mv fichier-1 fichier-2 mon_repertoire
+$ ls mon_repertoire
+fichier-1  fichier-2  fichier-concat-nouveau
+----
+
+=== rm – remove
+
+rm permet de supprimer un fichier.
+
+.On supprime le "fichier_temporaire"
+[source, console]
+----
+$ touch /tmp/fichier_temporaire
+$ ls /tmp/fichier_temporaire
+/tmp/fichier_temporaire
+$ rm /tmp/fichier_temporaire
+$ ls /tmp/fichier_temporaire
+ls: cannot access /tmp/fichier-temporaire: No such file or directory
+----
+
+=== rmdir – Remove Directory
+
+La commande rmdir permet de supprimer un répertoire.
+
+.On supprime un dossier juste après l'avoir créé
+[source, console]
+----
+$ mkdir /tmp/dossier-temporaire
+$ ls /tmp/dossier-temporaire
+/tmp/dossier-temporaire
+$ rmdir /tmp/dossier-temporaire
+$ ls /tmp/dossier-temporaire
+ls: cannot access /tmp/dossier-temporaire: No such file or directory
+----
+
+NOTE: `rmdir` ne peut supprimer que des répertoires vides !
+Comment faire pour supprimer un répertoire rempli de fichiers et de sous-dossiers alors?
+
+=== Suppression récursive – rm -r
+
+D'après Larousse, la récursivité est la : « propriété que possède une règle ou un élément constituant de pouvoir se répéter de manière théoriquement indéfinie. ».
+Si on souhaite supprimer un répertoire, avec ses sous-répertoires et éventuellement les fichiers qu'il contient, nous auront besoin de cette propriété, de telle sorte que pour chaque fichier et chaque répertoire, chacun d'eux soient supprimés.
+Il est possible de le faire avec la commande rm suivi des options -r (récursif) et -f (force).
+
+.Suppression d'un répertoire et tout ce qu'il contient
+[source, console]
+----
+$ mkdir -p /tmp/nouveau-repertoire/sous-repertoire
+$ touch /tmp/nouveau-repertoire/fichier-1
+$ touch /tmp/nouveau-repertoire/sous-repertoire/fichier-2
+$ rm -rf /tmp/nouveau-repertoire
+----
+
+WARNING: Faites très attention à la commande `rm -rf` car elle peut avoir des effets inattendus si elle est mal utilisée.
+Surtout qu'elle ne demande aucune confirmation.
+Si vous testez un `rm -rf /` en tant qu'utilisateur root, cela supprimera l'entièreté du système d'exploitation (Linux) ainsi que tous vos documents !
+Si vous avez Windows en dual boot et que sa partition est montée, cela supprimera également Windows.
+Si vous exécutez la même commande en tant qu'utilisateur normal, cela créera moins de dégâts car vous n'aurez pas les droits pour tout supprimer, mais il y a malgré tout de fortes chances que votre système ne démarre plus, et dans tous les cas, vous aurez supprimé les documents qui vous appartiennent !
+
+===  du – disk usage
+
+`du` permet de calculer en temps réel la taille d'un dossier et de tout ce qu'il contient.
+du est l'acronyme de Disk Usage (utilisation disque).
+Comme le calcul est fait en temps réel, cela peut prendre un certain temps si la quantité de fichiers est importante.
+On l'utilise souvent avec les options `-sch`
+
+.Explication des options
+[cols="1,6"]
+|===
+
+|Option |Fonction
+
+|-s
+|Summary – résumé. Cela permet de calculer la taille d'un dossier et de tout ce qu'il contient, et d'en afficher la somme.
+
+|-c
+|Produit un total à la dernière ligne. C'est l'addition de la taille de tous les répertoires.
+
+|-h
+|Human-readable – affiche les tailles en unités de mesures habituelles (kilo, mega, giga …)
+
+|===
+
+.Affiche la taille totale de chaque sous-répertoire de /usr
+[source, console]
+----
+# du -sch /usr/*
+708M	/usr/bin
+13M	    /usr/games
+184M	/usr/include
+4,8G	/usr/lib
+77M	    /usr/lib32
+242M	/usr/local
+40M	    /usr/sbin
+2,8G	/usr/share
+239M	/usr/src
+9,0G	total
+----
+
+Cependant, il y a un problème à cette commande : l'asterisque ne prend pas les fichiers et répertoires cachés.
+Si je prends l'exemple de la home directory de mon pc, j'aurai une différence de taille entre ces deux commandes :
+Ceci est la taille sans prendre en compte les fichiers et dossiers cachés :
+
+.Taille de ma home directory
+[source, console]
+----
+$ du -sch *
+…
+422G	total
+----
+
+Ceci est la taille réelle qui prend tout en compte.
+Mais le problème de cette commande, c'est qu'elle ne me donne aucun détail sur la taille des sous-répertoires.
+
+.Taille de ma home directory en utilisant le point plutôt que l'astérisque
+[source, console]
+----
+$ du -sch .
+431G	.
+431G	total
+----
+
+Pour avoir le meilleur des deux mondes, il faut utiliser les jokkers.
+Dans ce cas, nous aurons le détail des sous-répertoires, en incluant les fichiers et dossiers cachés.
+
+.L'utilisation des jokers rend la commande plus compliquée mais permet d'atteindre notre objectif
+[source, console]
+----
+$ du -sch .[!.]* *
+----
+
+Il faut déjà comprendre qu'on donne deux arguments à notre commande du.
+
+[graphviz, "figures/du-cmd", svg]
+....
+digraph structs {
+    node [shape=record, fontname="Courier"];
+    struct1 [label="du"];
+    struct2 [label="-sch"];
+    struct3 [label="<f0> .|<f1>[!.]|<f2>*"];
+    struct4 [label="*"];
+}
+....
+
+.Décomposition du premier argument `.[!.]*`
+[cols="1,6"]
+|===
+
+|Symbole |Fonction
+
+|.
+|Qui commence par un point (fichiers cachés)
+
+|[!.]
+|Qui n'est pas suivit d'un deuxième point (sinon on aurait ".." qui veut dire répertoire parent et ça fausserait complètement notre calcul de taille)
+
+|*
+|Suivit de n'importe quel autre suite de caractères
+
+|===
+
+.Second argument *`
+[cols="1,6"]
+|===
+
+|Symbole |Fonction
+
+|*
+|calcule la taille des fichiers non-cachés.
+
+|===
+
+=== df – disk free
+
+Permet d'afficher l'utilisation des disques et l'espace restant.
+
+==== La taille
+
+Pour afficher l'espace restant sur vos disques, utilisez la commande df (disk free).
+Nous utilisons l'option « h » pour Human Readable, afin d'afficher les tailles avec des unités plus lisibles que les octets.
+
+.Affichage en unités compréhensibles
+[source, console]
+----
+# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda7        15G   11G  3.3G  76% /
+none            4.0K     0  4.0K   0% /sys/fs/cgroup
+udev            3.9G   12K  3.9G   1% /dev
+tmpfs           794M  1.5M  793M   1% /run
+none            5.0M     0  5.0M   0% /run/lock
+none            3.9G   38M  3.9G   1% /run/shm
+none            100M   72K  100M   1% /run/user
+/dev/sda9       184G  158G   17G  91% /home
+/dev/sda5       453M  130M  296M  31% /boot
+/dev/sda8       4.5G  2.2G  2.1G  51% /var
+----
+
+Nous voyons ici par exemple, que notre système de fichier principal (/) fait 15 Go et que 11 Go sont utilisés.
+
+==== Ajouter une colonne pour les FS
+
+Cette option -T (pour type), vient s'ajouter aux autres options existantes.
+Elle permet d'ajouter une colonne supplémentaire, indiquant le système de fichier utilisé.
+Dans le screenshot ci-dessous, nous voyons ext4, qui est le seul espace de stockage persistent.
+Les autres étant tmpfs (en RAM) et devtmpfs (également volatile).
+
+.Affichage des systèmes de fichier
+[source, console]
+----
+# df -Th
+Filesystem     Type      Size  Used Avail Use% Mounted on
+udev           devtmpfs  3.9G     0  3.9G   0% /dev
+tmpfs          tmpfs     794M   81M  713M  11% /run
+/dev/sda7      ext4       15G  5.9G  7.5G  44% /
+tmpfs          tmpfs     3.9G  321M  3.6G   9% /dev/shm
+tmpfs          tmpfs     5.0M  4.0K  5.0M   1% /run/lock
+tmpfs          tmpfs     3.9G     0  3.9G   0% /sys/fs/cgroup
+/dev/sda5      ext4      453M  183M  243M  43% /boot
+/dev/sda8      ext4      4.5G  1.2G  3.2G  27% /var
+/dev/sda9      ext4      184G  172G  3.4G  99% /home
+/dev/sdb1      ext4      917G  662G  209G  77% /home/sylock/storage
+cgmfs          tmpfs     100K     0  100K   0% /run/cgmanager/fs
+tmpfs          tmpfs     794M  116K  794M   1% /run/user/1000
+----
