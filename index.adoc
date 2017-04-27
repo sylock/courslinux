@@ -20,4 +20,10 @@ include::les-commandes-de-base.adoc[]
 include::concepts-et-operations-sur-le-systeme-de-fichiers.adoc[]
 
 <<<
+include::fhs.adoc[]
+
+<<<
+include::ou-trouver-de-l-aide.adoc[]
+
+<<<
 include::bibliographie.adoc[]

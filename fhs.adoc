@@ -1,0 +1,179 @@
+==  FHS – Filesystem Hierarchy Standard
+
+FHS est un document qui défini l'organisation des fichiers et répertoires, afin de faciliter la distribution de logiciels d'une distribution Linux à une autre.
+Cela permet aussi aux utilisateurs de retrouver, d'un système à l'autre, une organisation relativement similaire.
+Le document officiel est consultable gratuitement
+footnote:[http://refspecs.linuxfoundation.org/fhs.shtml]
+.
+Il fait 52 pages et est très précis.
+Nous allons voir les grands principes et les grandes lignes
+
+=== Structure de FHS 2.3
+
+.Standard hierarchy 2.3
+[source, console]
+----
+/ ──  Le répertoire racine
+
+├── bin     Binaries                      Binaires des commandes essentielles
+├── boot    Bootloader                    Fichiers statiques du chargeur de démarrage
+├── dev     Devices                       Fichiers de périphériques
+├── etc     Editable Text Configuration   Configuration système spécifique à la machine
+├── lib     Libraries                     Bibliothèques partagées et modules du noyau
+├── media   Media                         Point de montage pour les stockages amovibles
+├── mnt     Mount                         Point de montage temporaire
+├── opt     Optional                      Paquetages d'applications supplémentaires
+├── sbin    System Binaries               Binaires systèmes essentiels
+├── srv     Services                      Données relatives aux services
+├── tmp     Temporary                     Fichiers temporaires
+├── usr     Unix System Ressources        Hiérarchie secondaire
+└── var     Variables                     Données dynamiques (qui changent de taille)
+----
+
+==== La racine ou /
+
+Contrairement à Windows où vous avez C:\, D:\, E:\ … soit les lettres de l'alphabet pour définir chaque nouveau système de fichier, sous Linux, il n'y a qu'une et une seule arborescence.
+C'est un peu comme si vous n'aviez qu'un C:\
+La racine de votre système de fichier sur un C : de votre Winows, c'est le « \ » dans lequel vous avez des répertoires comme « Windows », « Users », « Program Files » ...
+Mais on a déjà dit que sous Linux, le séparateur des chemins est le slash « / » et non le backslash « \ ».
+En conclusion : puisqu'il n'y a qu'une seule arborescence sous Linux, qu'il n'y a pas d'utilisation de lettres et qu'on utilise le slash « / » pour constituer un chemin de dossiers, la racine de votre système de fichier, le premier répertoire, sera toujours le « / ».
+
+==== /bin
+
+C'est ici que se trouvent les exécutables essentiels au fonctionnement du système.
+On y trouve la commande ls et d'autres que nous verront plus tard.
+Ce sont uniquement des commandes qui peuvent être utilisées par un utilisateur standard non administrateur du système.
+
+==== /boot
+
+Se trouvent ici tous les fichiers nécessaires au démarrage primaire du système d'exploitation.
+C'est là que se trouve le kernel Linux ainsi que les fichiers relatifs au système d'amorçage (boot loader) qu'on verra plus tard.
+
+==== /dev
+
+C'est un répertoire un peu spécial car il est généré au démarrage par le kernel.
+On y retrouve différents périphériques accessibles sous forme de fichiers.
+Comme les disques de votre système, un générateur aléatoire de nombre (/dev/random et /dev/urandom), et d'autres fichiers spéciaux.
+
+==== /etc
+
+Tous les fichiers de configuration du système et des différents services installés sont stockés dans ce répertoire.
+
+==== /lib
+
+Ce répertoire est assez volumineux car il contient l'ensemble des librairies partagées du système et des applications (équivalent des .dll Windows), ainsi que les modules kernels (équivalent des drivers Windows).
+
+==== /media
+
+C'est le répertoire standard pour monter des disques amovibles.
+Monter signifie qu'on rend disponible le contenu (fichiers et dossiers), on verra comment faire.
+
+==== /mnt
+
+Ce répertoire est fort similaire à /media.
+La différence c'est que /mnt est un lieu de montage temporaire, de travail.
+On y mettra donc le contenu de disques ou partitions, le temps d'une opération, puis on démontera le disque (afin de ne plus pouvoir accéder aux fichiers et dossiers).
+
+==== /opt
+
+Si vous installez une application prévue pour Linux, mais qui n'est pas installée par le système, c'est ici que se trouveront les fichiers.
+Par exemple, si vous installez Google Chrome en téléchargeant l'installateur Linux depuis la page web de Google.
+
+==== /sbin
+
+On y trouve les exécutables nécessaires au fonctionnement du système et du démarrage, ainsi que ceux réservés à l'administrateur du système.
+Les utilisateurs normaux n'ont généralement pas le droit de lancer les commandes qui s'y trouvent.
+ 
+==== /srv
+
+Selon FHS 2.3, les données de vos services (base de donnée, serveur web, serveur de fichier …) doivent être stockés ici.
+Dans la réalité, peut de distributions l'utilisent car dans les versions précédentes de FHS (2.2 et inférieurs), ce répertoire n'existait pas.
+Les applications avaient donc trouvé d'autres endroit où stocker leurs fichiers.
+Par exemple, /var/www/hml pour un serveur web apache.
+/lib/pgsql pour une base de donnée postgres, etc.
+
+==== /tmp
+
+Les fichiers temporaires nécessaires au fonctionnement du système ou des applications installées se trouvent ici.
+Ce qui est important de retenir, c'est que tout fichier que vous y placez peut-être supprimé automatiquement par le système.
+Soit à chaque arrêt du système, soit via un nettoyage automatique régulier (tous les fichiers vieux de plus de 30 jours par exemple).
+Cela dépend de la distribution que vous utilisez.
+
+==== /usr
+
+Usr ne signifie pas « user » (utilisateur) mais Unix System Ressources.
+C'est à dire les ressources du système.
+On y trouve quelques répertoires similaires à la racine (/) comme sbin, bin, lib.
+/usr contient des fichiers du système, mais qui ne sont pas nécessaires au démarrage : même si je perdais l'entièreté de son contenu, le système démarrerait quand même.
+
+==== /var
+
+Var pour variable.
+On sous-entend qu'on y stocke les fichiers dont la taille varie au cours de la vie du serveur.
+Par exemple, pour y stocker des fichiers de base de donnée, ou des fichiers de log (événements systèmes).
+À différencier des fichiers statiques que sont par exemple les programmes dans /bin.
+Un programme ne va pas changer de taille de lui-même, sauf cas de mise à jour.
+
+=== Les répertoires optionnels de FHS
+
+==== /home
+
+/home n'est pas obligatoire, mais FHS recommande que le répertoire par défaut des utilisateurs soient stockés ici.
+On a alors /home/<username>.
+Dans la pratique, vous trouverez un /home sur tous les linux que vous rencontrerez.
+
+==== /root
+
+Ce répertoire est la home directory de l'utilisateur root.
+La raison pour laquelle il ne se trouve pas au même emplacement que les autres utilisateur (ce serait /home/root), c'est qu'habituellement, on crée une partition spécifique pour le /home.
+De cette manière, si les utilisateurs normaux remplissent à 100 % leur partition, l'utilisateur root à toujours de l'espace disque disponible, puisqu'il n'est pas sur la même partition
+footnote:[Vous comprendrez plus précisément lorsqu'on verra les points de montage.]
+.
+
+=== Les catégories de répertoires
+
+Les différents répertoires sont catégorisés en fonction des caractéristiques de leur contenu :
+statique ou variable: est-ce que ce sont des fichiers qui peuvent grossir en taille au fil du temps ?
+Partageable ou non : les dossiers partageables peuvent être hébergés localement et accédés par une machine distante.
+Les fichiers non-partageables sont utilisé par la machine locale uniquement et doivent être stocké localement.
+Généralement, des fichiers qui ne rentrent pas dans les mêmes catégories, ne doivent pas se trouvent au même endroit.
+
+.Caractéristiques des différents types de répertoire
+[cols="h,d,d"]
+|===
+| |Shareable |Unshareable
+
+|Static |
+/usr
+
+/opt
+
+|
+/etc
+
+/boot
+
+|Variable
+|
+/var/mail
+
+/var/spool/news
+
+|
+/var/run
+
+/var/lock
+
+|===
+
+L'idée de cette différenciation est de simplifier la maintenance :
+
+  * Les backups des fichiers statiques ne doivent pas être exécutés selon les mêmes contraintes que les fichiers variables.
+  * Les fichiers statiques peuvent être disponibles sur des systèmes de fichier en read-only.
+  * On peut (et on est encouragé) à créer des partitions spécifiques pour les répertoires de fichiers variables. De cette manière, si la taille des fichiers grossi de façon imprévisible jusqu'à remplir la totalité de l'espace disque disponible, le système d'exploitation pourra continuer de fonctionner normalement, ce qui n'aurait pas été le cas si tous les fichiers se trouvaient sur la même partition. Dans les faits, on crée souvent une partition séparée pour ces répertoires :
+  ** /home
+  ** /tmp
+  ** /var
+  ** /srv (si utilisé)
+  ** /opt (si utilisé)
+  ** /boot (pour une autre raison qu'on verra plus tard)

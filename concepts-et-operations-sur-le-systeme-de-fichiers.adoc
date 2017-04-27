@@ -285,7 +285,7 @@ $ pwd
 === touch
 
 Cette commande, utilisée sur un répertoire ou fichier existant, met à jours le timestamp
-footnote::[Un timestamp est traduit par « horodatage » en français. Voici ce que wikipédia en dit : L'horodatage (en anglais timestamping) est un mécanisme qui consiste à associer une date et une heure à un événement, une information ou une donnée informatique.
+footnote:[Un timestamp est traduit par « horodatage » en français. Voici ce que wikipédia en dit : L'horodatage (en anglais timestamping) est un mécanisme qui consiste à associer une date et une heure à un événement, une information ou une donnée informatique.
 http://fr.wikipedia.org/wiki/Horodatage]
 de la dernière modification du fichier ou répertoire à l'heure courante, information qu'on a déjà pu  découvrir avec la commande ls -l.
 

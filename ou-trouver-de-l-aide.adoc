@@ -1,0 +1,72 @@
+== Où trouver de l'aide?
+
+=== Aide en ligne de commande : --help
+
+Toutes les commandes standards proposent une aide succincte si vous lancez la commande suivie de l'argument --help ou -h.
+C'est une aide généralement utilisée lorsque vous savez ce que vous voulez faire, mais vous avez oublié l'option exacte (est-ce que c'est -l, -m?).
+
+=== Les manuels
+
+Si vous avez besoin de plus d'informations que celles fournies par le --help, vous avez à disposition le manuel de la commande.
+Vous pouvez le consulter en utilisant la commande man (pour manuel) suivie du nom du programme.
+
+.Afficher le manuel de la commande ls
+[source, console]
+----
+man ls
+----
+
+Remarque intéressante, vous avez également un manuel du manuel !
+
+.Afficher le manuel du manuel!
+[source, console]
+----
+man man
+----
+
+=== Raccourcis claviers
+
+Lorsque vous lancez une page de manuel, vous vous trouvez dans un lecteur de texte (less).
+Il vous offre quelques possibilités.
+
+.Raccourcis clavier du manuel
+|===
+|Touche du clavier       |Explication
+
+|Flèche du haut ou j     |Remonte d'une ligne.
+|Flèche du bas ou k      |Descend d'une ligne.
+|Espace ou f ou PageDown |Défilement du texte vers le bas de plusieurs lignes.
+|b ou PageUp             |Défilement du texte vers le haut de plusieurs lignes.
+|q                       |Quitter.
+|/ + mot-clé             |Recherche dans le document toutes les occurrences du mot-clé.
+|n (minuscule)           |Cherche l’occurrence suivante de votre recherche.
+|N (majuscule)           |Cherche l'occurrence précédente de votre recherche.
+|ESC-u                   |Annule une recherche.
+
+|===
+
+=== Les chapitres du manuel
+Les chapitres peuvent varier d'un manuel à l'autre, selon la complexité de la commande.
+Certaines sont toujours présentes.
+
+.Description des chapitres typiques d'un manuel
+|===
+|Nom de la catégorie    |Explication
+|NAME                   |Nom et description courte de la commande.
+|SYNOPSIS               |Comment la commande doit être utilisée (syntaxe).
+|DESCRIPTION            |Explication complète de la commande et de ses différentes options.
+|EXAMPLES               |Section optionnelle, on y montre des exemples concrets.
+|SEE ALSO               |Référence d'autres documents d'aide relatifs au sujet.
+
+=== Conventions pour la description de la syntaxe
+Dans la rubrique synopsis, chaque ligne représente une façon d'utiliser la commande.
+Par exemple dans le manuel de la commande less, vous avez notamment deux lignes distinctes :
+
+.my description
+[source, console]
+----
+less --help
+less --version
+----
+
+
